@@ -1,6 +1,4 @@
 import MoreDetailButton from "@/components/moreDetailButton"
-import Link from "next/link"
-import { redirect } from "next/navigation"
 
 export default function LastestNews() {
     //seed data
@@ -42,7 +40,7 @@ export default function LastestNews() {
                     </li>
                 })}
                 <li className="flex justify-end pt-5">
-                    <MoreDetailButton src="news" />
+                    <MoreDetailButton src="trang-chu" />
                 </li>
             </ul>
 
