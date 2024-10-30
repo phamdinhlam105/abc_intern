@@ -1,4 +1,4 @@
-import MoreDetailButton from "./moreDetailButton"
+import MoreDetailButton from "./more-detail-button"
 
 interface IAnouncement{
     title: string;

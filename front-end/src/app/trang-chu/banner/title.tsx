@@ -1,7 +1,7 @@
 
 export default function Title() {
     return (
-        <div className=" md:w-1/2 md:pl-20 pb-20 sm:w-full sm:px-5">
+        <div className=" md:w-1/2 md:pl-20 md:pb-20 pl-3 pb-5 w-full px-5">
             <p className="mb-6 text-xl font-light tracking-widest lg:text-lg uppercase">
                 Cổng thông tin điện tử
             </p>

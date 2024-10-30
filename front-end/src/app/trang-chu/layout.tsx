@@ -7,8 +7,6 @@ export default function IndexLayout({
   return (
     <section>
 
-        <Header />
-
       {children}
     </section>
   )
