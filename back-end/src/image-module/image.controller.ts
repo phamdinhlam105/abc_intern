@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
 import { ImageService } from './image.service';
-import { Body, Delete, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
 import { CreateImageDto } from './image.dto';
+
+@Controller('image')
 export class ImageController {
     constructor(private imageService: ImageService) { }
 

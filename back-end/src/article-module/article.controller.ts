@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
-import { Body, Delete, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
 import { ArticleService } from './article.service';
 import { CreateArticleDto } from './article.dto';
+
+@Controller('article')
 export class ArticleController {
     constructor(private articleService: ArticleService) { }
 

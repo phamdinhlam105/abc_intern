@@ -6,7 +6,7 @@ export default function entityToImage(imageEntity: ImageEntity): Image {
       id: imageEntity.id,
       idArticle: imageEntity.idArticle,
       describe: imageEntity.describe,
-      createDate: imageEntity.createDate,
+      createDate: imageEntity.createDate.toString(),
       url: imageEntity.url
    })
 }

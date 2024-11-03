@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
-import { Body, Delete, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
 import { CreateCategoryDto } from './category.dto';
 import { CategoryService } from './category.service';
+
+@Controller('category')
 export class CategoryController {
     constructor(private categoryService: CategoryService) { }
 

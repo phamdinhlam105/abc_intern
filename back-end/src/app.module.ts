@@ -15,9 +15,9 @@ import { ArticleModule } from './article-module/article.module';
       port:5432,
       username: 'postgres',
       password:'123456',
-      database:'abc intern',
+      database:'abc_intern',
       entities: [ImageEntity,ArticleEntity,CategoryEntity],
-      synchronize:true,
+      synchronize:true
     })],
   controllers: [],
   providers: [],

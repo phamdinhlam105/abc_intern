@@ -10,7 +10,7 @@ export default function entityToArticle(entity: ArticleEntity): Article {
         title: entity.title,
         content: entity.content,
         thumbnail: entity.thumbnail,
-        createDate:entity.createDate,
+        createDate:entity.createDate.toString(),
         category: entityToCategory(entity.category),
         gallery: entity.gallery ? entity.gallery.map(image => entityToImage(image)) : []
     })

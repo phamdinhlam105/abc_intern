@@ -21,9 +21,6 @@ export class CategoryEntity {
     @Column({ nullable: false })
     slug: string;
 
-    @Column({ type: 'uuid', nullable: true })
-    parentId: UUID;
-
     @ManyToOne(() => CategoryEntity, (category) => category.subCategories)
     parentCategory: CategoryEntity;
 

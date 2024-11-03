@@ -30,8 +30,8 @@ export class ArticleEntity {
     @Column({ type: 'text', nullable: false })
     thumbnail: string;
 
-    @Column({ type: 'datetime', nullable: false })
-    createDate: string;
+    @Column({ type: 'timestamp', nullable: false })
+    createDate: Date;
 
     @ManyToOne(() => CategoryEntity, (category) => category.posts)
     category: CategoryEntity;

@@ -4,7 +4,7 @@ import { Repository } from "typeorm";
 import { UUID } from "crypto";
 import { validate } from 'uuid'
 import { CategoryEntity } from "./category.entity";
-import { CreateCategoryDto } from "./category.dto";
+import { CreateCategoryDto, UpdateCategoryDto } from "./category.dto";
 import entityToCategory from "./category.ulti";
 import Category from "./category.interface";
 
@@ -19,7 +19,6 @@ export class CategoryService {
         const newCategory = new CategoryEntity();
         const parentCategory = await this.categoryRepository.findOneBy({ id: category.parentId as UUID });
         if (parentCategory) {
-            newCategory.parentId = parentCategory.id;
             newCategory.parentCategory = parentCategory;
         }
         newCategory.name = category.name;
@@ -43,14 +42,22 @@ export class CategoryService {
         throw new HttpException('id not found ', HttpStatus.NOT_FOUND);
     }
 
-    async updateCategory(id: string, updatedImage: Partial<Category>): Promise<Category> {
+    async updateCategory(id: string, updatedCategory: Partial<UpdateCategoryDto>): Promise<Category> {
         if (!validate(id))
             throw new HttpException('invalid id', HttpStatus.BAD_REQUEST);
         const idUUID = id as UUID;
-        await this.categoryRepository.update(id, updatedImage);
-        const updatedImageEntity = await this.categoryRepository.findOneBy({ id: idUUID });
-        if (updatedImage)
-            return entityToCategory(updatedImageEntity);
+        const updatedCategoryEntity = await this.categoryRepository.findOneBy({ id: idUUID });
+        if (updatedCategory.newParentId) {
+            const parentCategory = await this.categoryRepository.findOneBy({ id: updatedCategory.newParentId as UUID });
+            if (parentCategory) {
+                updatedCategoryEntity.parentCategory = parentCategory;
+            }
+        }
+        updatedCategoryEntity.name = updatedCategory.name;
+        updatedCategoryEntity.slug = updatedCategory.slug;
+        await this.categoryRepository.update(id, updatedCategoryEntity);
+        if (updatedCategory)
+            return entityToCategory(updatedCategoryEntity);
         throw new HttpException('id not found ', HttpStatus.NOT_FOUND);
     }
 
@@ -58,8 +65,8 @@ export class CategoryService {
         if (!validate(id))
             throw new HttpException('invalid id', HttpStatus.BAD_REQUEST);
         const idUUID = id as UUID;
-        const deleteImage = await this.categoryRepository.findOneBy({ id: idUUID });
-        if (deleteImage) {
+        const deleteCategory = await this.categoryRepository.findOneBy({ id: idUUID });
+        if (deleteCategory) {
             await this.categoryRepository.delete(idUUID);
             return { message: 'Category deleted successfully', status: HttpStatus.OK };
         }

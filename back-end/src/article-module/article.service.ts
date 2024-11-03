@@ -15,18 +15,18 @@ export class ArticleService {
         @InjectRepository(ArticleEntity)
         private articleRepository: Repository<ArticleEntity>,
         @InjectRepository(CategoryEntity)
-        private categoryRepository : Repository<CategoryEntity>
+        private categoryRepository: Repository<CategoryEntity>
     ) { }
 
     async createArticle(article: CreateArticleDto): Promise<Article> {
         const newArticle = new ArticleEntity();
-        const category = await this.categoryRepository.findOneBy({id:article.idCategory});
+        const category = await this.categoryRepository.findOneBy({ id: article.idCategory });
         if (category) {
             newArticle.idCategory = article.idCategory;
             newArticle.category = category;
         }
         newArticle.title = article.title;
-        newArticle.createDate = article.createDate;
+        newArticle.createDate = article.createDate ? new Date(article.createDate) : new Date();
         await this.articleRepository.save(newArticle);
         return entityToArticle(newArticle);
     }
@@ -40,7 +40,7 @@ export class ArticleService {
         if (!validate(id))
             throw new HttpException('invalid id', HttpStatus.BAD_REQUEST);
         const idUUID = id as UUID;
-        const article = await this.articleRepository.findOne({where: {id: idUUID },relations:{category:true,gallery:true}});
+        const article = await this.articleRepository.findOne({ where: { id: idUUID }, relations: { category: true, gallery: true } });
         if (article)
             return entityToArticle(article);
         throw new HttpException('id not found ', HttpStatus.NOT_FOUND);
@@ -67,5 +67,14 @@ export class ArticleService {
             return { message: 'Category deleted successfully', status: HttpStatus.OK };
         }
         throw new HttpException('Category not found', HttpStatus.NOT_FOUND);
+    }
+
+    async getByCategory(idCategory: string): Promise<Article[]> {
+        if (!validate(idCategory))
+            throw new HttpException('invalid id', HttpStatus.BAD_REQUEST);
+        const idUUID = idCategory as UUID;
+        const category = await this.categoryRepository.findBy({ id: idUUID });
+        const listArticle = await this.articleRepository.findBy({ category: category });
+        return listArticle.map(entityToArticle);
     }
 }

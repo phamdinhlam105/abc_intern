@@ -25,8 +25,8 @@ export class ImageEntity {
     @Column({ type: 'text', nullable: false })
     url: string;
 
-    @Column({type:'datetime',nullable:false})
-    createDate: string;
+    @Column({type:'timestamp',nullable:false})
+    createDate: Date;
 
     @ManyToOne(() => ArticleEntity, (article) => article.gallery)
     article: ArticleEntity;

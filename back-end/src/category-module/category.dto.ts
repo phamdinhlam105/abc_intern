@@ -1,7 +1,7 @@
 
-import { IsDateString, IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
-export class CreateCategoryDto {
+class CategoryDto {
     @IsString()
     @IsNotEmpty()
     name: string;
@@ -9,8 +9,16 @@ export class CreateCategoryDto {
     @IsString()
     @IsNotEmpty()
     slug: string;
+}
 
+export class CreateCategoryDto extends CategoryDto {
     @IsUUID()
     @IsString()
     parentId: string;
+}
+
+export class UpdateCategoryDto extends CategoryDto {
+    @IsUUID()
+    @IsString()
+    newParentId: string;
 }

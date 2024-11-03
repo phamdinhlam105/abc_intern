@@ -22,7 +22,7 @@ export class ImageService {
     async createImage(image: CreateImageDto): Promise<Image> {
         const newImageEntity = new ImageEntity();
         newImageEntity.describe = image.describe;
-        newImageEntity.createDate = image.createDate ? image.createDate : Date.now().toString();
+        newImageEntity.createDate = image.createDate ? new Date(image.createDate) : new Date();
         newImageEntity.url = image.url;
         if (image.idArticle) {
             const oldArticle = await this.articleRepository.findOneBy({ id: image.idArticle as UUID });
@@ -63,7 +63,7 @@ export class ImageService {
         if (updatedImageEntity) {
             updatedImageEntity.describe = updatedImage.describe;
             updatedImageEntity.url = updatedImage.url;
-            updatedImageEntity.createDate = updatedImage.createDate;
+            updatedImageEntity.createDate = new Date(updatedImage.createDate);
             if (updatedImage.idArticle && updatedImage.idArticle !== updatedImageEntity.idArticle) {
                 const oldArticle = await this.articleRepository.findOne({ where: { id: updatedImage.idArticle as UUID }, relations: { gallery: true } });
                 oldArticle.gallery = oldArticle.gallery.filter(img => img.id !== updatedImage.id);
