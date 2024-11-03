@@ -2,11 +2,11 @@ import Link from "next/link";
 
 export default function MorePicture() {
     return (
-        <div className="flex items-end md:w-10 relative">
+        <div className="flex items-end w-10 relative">
             <div>
                 <Link
                     href="#"
-                    className="md:absolute h-10 w-full flex text-lg tracking-widest origin-top-left md:-rotate-90 items-center white-space-nowrap hover:scale-105 duration-150">
+                    className="md:absolute h-10 md:w-96 w-80 flex text-lg tracking-widest origin-top-left md:-rotate-90 items-center white-space-nowrap hover:scale-105 duration-150">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none" viewBox="0 0 24 24"
