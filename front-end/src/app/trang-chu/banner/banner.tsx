@@ -4,7 +4,7 @@ export default function Banner() {
         <div className="container w-1/2 absolute inset-y-0 right-0 invisible md:visible">
             <img
                 className="object-cover"
-                src="/images/Banner.svg"
+                src="/images/banner.svg"
                 style={{objectFit: "contain"}}
                 alt="banner"
             />
