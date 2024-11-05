@@ -7,8 +7,7 @@ export default function entityToCategory(entity: CategoryEntity): Category {
             id: entity.id,
             name: entity.name,
             slug: entity.slug,
-            parentId: entity.parentId,
-            parentCategory: entityToCategory(entity.parentCategory),
+            parentCategory: entity.parentCategory? entityToCategory(entity.parentCategory): null,
         });
     return null;
 }

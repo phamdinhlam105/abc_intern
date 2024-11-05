@@ -17,9 +17,11 @@ export class CategoryService {
 
     async createCategory(category: CreateCategoryDto): Promise<Category> {
         const newCategory = new CategoryEntity();
-        const parentCategory = await this.categoryRepository.findOneBy({ id: category.parentId as UUID });
-        if (parentCategory) {
-            newCategory.parentCategory = parentCategory;
+        if (category.parentId) {
+            const parentCategory = await this.categoryRepository.findOneBy({ id: category.parentId as UUID });
+            if (parentCategory) {
+                newCategory.parentCategory = parentCategory;
+            }
         }
         newCategory.name = category.name;
         newCategory.slug = category.slug;
@@ -29,6 +31,7 @@ export class CategoryService {
 
     async getAllCategories(): Promise<Category[]> {
         const categories = await this.categoryRepository.find();
+        console.log(categories.map(entityToCategory))
         return categories.map(entityToCategory);
     }
 
