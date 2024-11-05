@@ -1,4 +1,4 @@
-import { UUID } from "crypto";
+
 
 export const fetchArticle = async () => {
     const res = await fetch(``);
@@ -15,14 +15,14 @@ export const fetchCategory = async () => {
     return res.json();
 }
 
-export const fetchGalleryByArticle = async (id: UUID) => {
+export const fetchGalleryByArticle = async (id: string) => {
     const res = await fetch('');
     if (!res.ok)
         throw new Error('Get data failed');
     return res.json();
 }
 
-export const fetchArticleByCategory = async (id: UUID) => {
+export const fetchArticleByCategory = async (id: string) => {
     const res = await fetch('');
     if (!res.ok)
         throw new Error('Get data failed');
