@@ -19,8 +19,12 @@ body {
   background: var(--background);
   font-family: 'Inter';
 }
-h2 h3 h1{
+h2, h3, h1{
   font-family: 'Merriweather';
+}
+
+pre{
+  font-family: 'Inter';
 }
 @layer utilities {
   .text-balance {

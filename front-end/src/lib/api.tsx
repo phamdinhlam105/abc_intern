@@ -1,29 +1,4 @@
-//database
-
 import { UUID } from "crypto";
-
-// Category:
-// -id uuid
-// -name string
-// -slug string
-// -parentId uuid(nullable)
-// -subcategory [Category]
-// -posts [Article]
-
-// Article:
-// -id uuid
-// -idCat uuid
-// -title text
-// -content text
-// -thumbnail
-// -gallery: [Image]
-
-//Image:
-//-id uuid
-//-idArticle uuid
-//-url string
-
-
 
 export const fetchArticle = async () => {
     const res = await fetch(``);

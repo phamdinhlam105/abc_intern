@@ -5,7 +5,6 @@ export default function Banner() {
             <img
                 className="object-cover"
                 src="/images/banner.svg"
-                style={{objectFit: "contain"}}
                 alt="banner"
             />
         </div>

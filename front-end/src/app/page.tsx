@@ -1,5 +1,5 @@
-import { permanentRedirect } from "next/navigation";
+import HomePage from "./trang-chu/page";
 
 export default function Home() {
-  permanentRedirect('/trang-chu');
+    return <HomePage />
 }
