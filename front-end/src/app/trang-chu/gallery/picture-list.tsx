@@ -4,12 +4,10 @@ import { GALLERY } from "@/components/gallery/constants/gallery.constants"
 
 export default function PictureList() {
 
-    const gallery = GALLERY;
-
     return (
         <div className="md:w-7/12">
             <ul className="md:grid grid-cols-2 gap-4 justify-between ">
-                {gallery.map((p, idx) => {
+                {GALLERY.map((p, idx) => {
                     return <li key={idx} className="bg-primary">
                         <div>
                             <img

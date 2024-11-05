@@ -3,12 +3,10 @@ import { ANNOUCEMENTS_LIST } from "@/components/tin-tuc/constants/tin-tuc.consta
 
 export default function Announcements() {
 
-    const announcementsList = ANNOUCEMENTS_LIST
-
     return (
         <div>
             <ul className=" space-y-2 list-none px-2">
-                {announcementsList.map((a, idx) => {
+                {ANNOUCEMENTS_LIST.map((a, idx) => {
                     return <li key={idx}>
                         <Announcement {...a} />
                     </li>

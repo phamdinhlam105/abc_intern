@@ -12,8 +12,7 @@ export default function ArticleTitle(article: {
             backgroundPosition: 'center'
         }}>
             <div className="md:w-2/3 w-3/4 translate-y-1/3 bg-secondary text-white md:py-14 md:px-20 px-3 py-3">
-                {article.category && <Breadcrumb category={article.category} />}
-                <h2 className="text-lg font-bold my-5">{article.title}</h2>
+                <Breadcrumb category={article.category} title={article.title} />
                 <p>Tải file đính kèm</p>
             </div>
         </div>

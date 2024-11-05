@@ -8,7 +8,6 @@ import slugify from "slugify";
 export default function LastestNews() {
 
     const router = useRouter();
-    const lastestNews = LATEST_NEWS;
 
     const clickHandle = (id: number) => {
         const slug = slugify(id.toString(), { lower: true, strict: true });
@@ -22,7 +21,7 @@ export default function LastestNews() {
                 Tin tức mới nhất
             </h2>
             <ul className=" space-y-1 list-none px-2 md:w-1/2 sm:w-full md:pr-10">
-                {lastestNews.map(news => {
+                {LATEST_NEWS.map(news => {
                     return <li key={news.id} className="text-lg flex items-center justify-start">
                         <LatestNewsListSymbol />
                         <a onClick={() => clickHandle(news.id)} className="hover:underline cursor-pointer">

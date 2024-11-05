@@ -6,16 +6,14 @@ import ArticleTitle from "./title";
 
 export default function NewsDetail() {
 
-    //fetch data
-    const article = ARTICLE
-    if (!article) {
+    if (!ARTICLE) {
         return <div>Loading...</div>;
     }
     return (
         <div className="flex flex-col items-center justify-center">
-            <ArticleTitle {...article} />
-            <ArticleContent content={article.content} describe={article.describe} />
-            <RelateNews idCategory={article.category.id.toString()} />
+            <ArticleTitle {...ARTICLE} />
+            <ArticleContent content={ARTICLE.content} describe={ARTICLE.describe} />
+            <RelateNews idCategory={ARTICLE.category.id.toString()} />
         </div>
     );
 }
