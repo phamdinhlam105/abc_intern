@@ -67,7 +67,6 @@ export class ImageService {
             if (updatedImage.idArticle && updatedImage.idArticle !== updatedImageEntity.idArticle) {
                 const oldArticle = await this.articleRepository.findOne({ where: { id: updatedImage.idArticle as UUID }, relations: { gallery: true } });
                 oldArticle.gallery = oldArticle.gallery.filter(img => img.id !== updatedImage.id);
-
                 const newArticle = await this.articleRepository.findOne({ where: { id: updatedImage.id }, relations: { gallery: true } });
                 newArticle.gallery.push(updatedImageEntity);
                 this.articleRepository.save(oldArticle);

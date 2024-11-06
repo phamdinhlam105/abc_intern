@@ -1,6 +1,5 @@
-import { Request, Response } from 'express';
-import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
-import { CreateCategoryDto } from './category.dto';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { CreateCategoryDto, UpdateCategoryDto } from './category.dto';
 import { CategoryService } from './category.service';
 import Category from './category.interface';
 
@@ -14,20 +13,20 @@ export class CategoryController {
     }
 
     @Get()
-    async getAllCategories(req: Request): Promise<Category[]> {
+    async getAllCategories(): Promise<Category[]> {
         return await this.categoryService.getAllCategories();
     }
 
-    @Get(':id')
-    async getCategoryById(req: Request): Promise<Category> {
-        return await this.categoryService.getCategoryById(req.params.id);
+    @Get('/:id')
+    async getCategoryById(@Param('id') id: string): Promise<Category> {
+        return await this.categoryService.getCategoryById(id);
     }
-    @Post(':id')
-    async updateImage(req: Request): Promise<any> {
-        return await this.categoryService.updateCategory(req.params.id, req.body);
+    @Put('/:id')
+    async updateImage(@Param('id') id: string, @Body() req: UpdateCategoryDto): Promise<any> {
+        return await this.categoryService.updateCategory(id, req);
     }
-    @Delete(':id')
-    async deleteImage(req: Request) {
-        await this.categoryService.deleteCategory(req.params.id);
+    @Delete('/:id')
+    async deleteImage(@Param('id') id: string) {
+        await this.categoryService.deleteCategory(id);
     }
 }

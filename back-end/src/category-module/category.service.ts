@@ -30,8 +30,7 @@ export class CategoryService {
     }
 
     async getAllCategories(): Promise<Category[]> {
-        const categories = await this.categoryRepository.find();
-        console.log(categories.map(entityToCategory))
+        const categories = await this.categoryRepository.find({relations:{parentCategory:true}});
         return categories.map(entityToCategory);
     }
 
@@ -39,7 +38,7 @@ export class CategoryService {
         if (!validate(id))
             throw new HttpException('invalid id', HttpStatus.BAD_REQUEST);
         const idUUID = id as UUID;
-        const image = await this.categoryRepository.findOneBy({ id: idUUID });
+        const image = await this.categoryRepository.findOne({where:{ id: idUUID },relations:{parentCategory:true}});
         if (image)
             return entityToCategory(image);
         throw new HttpException('id not found ', HttpStatus.NOT_FOUND);

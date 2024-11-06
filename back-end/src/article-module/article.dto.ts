@@ -1,5 +1,5 @@
 
-import { IsDateString, IsNotEmpty, isString, IsString, IsUUID } from 'class-validator';
+import { IsDateString, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 import { UUID } from 'crypto';
 
 export class CreateArticleDto {
@@ -15,6 +15,10 @@ export class CreateArticleDto {
     @IsString()
     @IsNotEmpty()
     content: string;
+    
+    @IsString()
+    @IsNotEmpty()
+    describe: string;
 
     @IsString()
     @IsNotEmpty()

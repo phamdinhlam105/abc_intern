@@ -18,9 +18,6 @@ export class ArticleEntity {
     @PrimaryGeneratedColumn('uuid')
     id: UUID;
 
-    @Column({ type: 'uuid', nullable: false })
-    idCategory: UUID;
-
     @Column({ type: 'text', nullable: false })
     title: string;
 
@@ -29,6 +26,9 @@ export class ArticleEntity {
 
     @Column({ type: 'text', nullable: false })
     thumbnail: string;
+
+    @Column({ type: 'text', nullable: false })
+    describe: string;
 
     @Column({ type: 'timestamp', nullable: false })
     createDate: Date;

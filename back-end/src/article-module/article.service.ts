@@ -22,10 +22,13 @@ export class ArticleService {
         const newArticle = new ArticleEntity();
         const category = await this.categoryRepository.findOneBy({ id: article.idCategory });
         if (category) {
-            newArticle.idCategory = article.idCategory;
+            newArticle.category.id = article.idCategory;
             newArticle.category = category;
         }
         newArticle.title = article.title;
+        newArticle.content = article.content;
+        newArticle.describe = article.describe;
+        newArticle.thumbnail = article.thumbnail;
         newArticle.createDate = article.createDate ? new Date(article.createDate) : new Date();
         await this.articleRepository.save(newArticle);
         return entityToArticle(newArticle);

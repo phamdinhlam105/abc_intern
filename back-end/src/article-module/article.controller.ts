@@ -1,5 +1,4 @@
-import { Request, Response } from 'express';
-import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { ArticleService } from './article.service';
 import { CreateArticleDto } from './article.dto';
 import Article from './article.interface';
@@ -14,26 +13,26 @@ export class ArticleController {
     }
 
     @Get()
-    async getAllArticle(req: Request): Promise<Article[]> {
+    async getAllArticle(): Promise<Article[]> {
         return await this.articleService.getAllArticle();
     }
 
     @Get(':id')
-    async getArticleById(req: Request): Promise<Article> {
-        return await this.articleService.getArticleById(req.params.id);
+    async getArticleById(@Param('id') id: string): Promise<Article> {
+        return await this.articleService.getArticleById(id);
 
     }
-    @Post(':id')
-    async updateArticle(req: Request): Promise<any> {
-        return await this.articleService.updateArticle(req.params.id, req.body);
+    @Put(':id')
+    async updateArticle(@Param('id') id: string, @Body() req: CreateArticleDto): Promise<any> {
+        return await this.articleService.updateArticle(id, req);
 
     }
     @Delete(':id')
-    async deleteArticle(req: Request) {
-        await this.articleService.deleteArticle(req.params.id);
+    async deleteArticle(@Param('id') id: string) {
+        await this.articleService.deleteArticle(id);
     }
     @Get('getByCategory/:id')
-    async getById(req: Request): Promise<Article[]>{
-        return this.articleService.getByCategory(req.params.id);
+    async getById(@Param('id') id: string): Promise<Article[]> {
+        return this.articleService.getByCategory(id);
     }
 }
