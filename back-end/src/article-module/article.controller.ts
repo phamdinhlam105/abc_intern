@@ -28,7 +28,7 @@ export class ArticleController {
 
     }
     @Delete(':id')
-    async deleteArticle(@Param('id') id: string) {
+    async deleteArticle(@Param('id') id: string): Promise<any> {
         await this.articleService.deleteArticle(id);
     }
     @Get('getByCategory/:id')

@@ -4,7 +4,7 @@ import { Repository } from "typeorm";
 import { UUID } from "crypto";
 import { validate } from 'uuid'
 import { CategoryEntity } from "./category.entity";
-import { CreateCategoryDto, UpdateCategoryDto } from "./category.dto";
+import { CategoryDto } from "./category.dto";
 import entityToCategory from "./category.ulti";
 import Category from "./category.interface";
 
@@ -15,63 +15,71 @@ export class CategoryService {
         private categoryRepository: Repository<CategoryEntity>
     ) { }
 
-    async createCategory(category: CreateCategoryDto): Promise<Category> {
+    private idValid(id: string) {
+        if (!validate(id))
+            throw new HttpException('invalid id', HttpStatus.BAD_REQUEST);
+    }
+
+    async createCategory(category: CategoryDto): Promise<Category> {
         const newCategory = new CategoryEntity();
         if (category.parentId) {
             const parentCategory = await this.categoryRepository.findOneBy({ id: category.parentId as UUID });
-            if (parentCategory) {
-                newCategory.parentCategory = parentCategory;
-            }
+            if (!parentCategory)
+                throw new HttpException('id parent category not found', HttpStatus.NOT_FOUND);
+            newCategory.parentCategory = parentCategory;
         }
-        newCategory.name = category.name;
-        newCategory.slug = category.slug;
+        Object.assign(newCategory, category);
         await this.categoryRepository.save(newCategory);
         return entityToCategory(newCategory);
     }
 
     async getAllCategories(): Promise<Category[]> {
-        const categories = await this.categoryRepository.find({relations:{parentCategory:true}});
+        const categories = await this.categoryRepository.find({ relations: { parentCategory: true } });
         return categories.map(entityToCategory);
     }
 
     async getCategoryById(id: string): Promise<Category | null> {
-        if (!validate(id))
-            throw new HttpException('invalid id', HttpStatus.BAD_REQUEST);
-        const idUUID = id as UUID;
-        const image = await this.categoryRepository.findOne({where:{ id: idUUID },relations:{parentCategory:true}});
-        if (image)
-            return entityToCategory(image);
-        throw new HttpException('id not found ', HttpStatus.NOT_FOUND);
+        this.idValid(id);
+        const category = await this.categoryRepository.findOne({ where: { id: id as UUID }, relations: { parentCategory: true } });
+        if (!category)
+            throw new HttpException('id not found ', HttpStatus.NOT_FOUND);
+        return entityToCategory(category);
     }
 
-    async updateCategory(id: string, updatedCategory: Partial<UpdateCategoryDto>): Promise<Category> {
-        if (!validate(id))
-            throw new HttpException('invalid id', HttpStatus.BAD_REQUEST);
-        const idUUID = id as UUID;
-        const updatedCategoryEntity = await this.categoryRepository.findOneBy({ id: idUUID });
-        if (updatedCategory.newParentId) {
-            const parentCategory = await this.categoryRepository.findOneBy({ id: updatedCategory.newParentId as UUID });
-            if (parentCategory) {
+    async updateCategory(id: string, updatedCategory: Partial<CategoryDto>): Promise<Category> {
+        this.idValid(id);
+        const updatedCategoryEntity = await this.categoryRepository.findOne({ where: { id: id as UUID }, relations: { parentCategory: true } });
+        if (!updatedCategoryEntity)
+            throw new HttpException('id not found ', HttpStatus.NOT_FOUND);
+        const { parentId, ...rest } = updatedCategory;
+        Object.assign(updatedCategoryEntity, rest)
+
+        console.log(updatedCategoryEntity)
+        if (updatedCategory.hasOwnProperty('parentId')) {
+            if (parentId) {
+                const parentCategory = await this.categoryRepository.findOneBy({ id: parentId as UUID });
+                console.log(parentCategory)
+                if (!parentCategory)
+                    throw new HttpException('parent category id not found', HttpStatus.NOT_FOUND);
                 updatedCategoryEntity.parentCategory = parentCategory;
             }
+            else
+                updatedCategoryEntity.parentCategory = null;
         }
-        updatedCategoryEntity.name = updatedCategory.name;
-        updatedCategoryEntity.slug = updatedCategory.slug;
-        await this.categoryRepository.update(id, updatedCategoryEntity);
-        if (updatedCategory)
-            return entityToCategory(updatedCategoryEntity);
-        throw new HttpException('id not found ', HttpStatus.NOT_FOUND);
+        await this.categoryRepository.save(updatedCategoryEntity);
+        return entityToCategory(updatedCategoryEntity);
     }
 
     async deleteCategory(id: string) {
-        if (!validate(id))
-            throw new HttpException('invalid id', HttpStatus.BAD_REQUEST);
-        const idUUID = id as UUID;
-        const deleteCategory = await this.categoryRepository.findOneBy({ id: idUUID });
-        if (deleteCategory) {
-            await this.categoryRepository.delete(idUUID);
+        this.idValid(id);
+        const deleteCategory = await this.categoryRepository.findOneBy({ id: id as UUID });
+        if (!deleteCategory)
+            throw new HttpException('Category not found', HttpStatus.NOT_FOUND);
+        try {
+            await this.categoryRepository.delete(deleteCategory);
             return { message: 'Category deleted successfully', status: HttpStatus.OK };
+        } catch (error) {
+            throw new HttpException('Category can not be deleted', HttpStatus.CONFLICT);
         }
-        throw new HttpException('Category not found', HttpStatus.NOT_FOUND);
     }
 }

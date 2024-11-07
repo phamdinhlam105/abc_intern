@@ -3,16 +3,6 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "ty
 import { CategoryEntity } from '../category-module/category.entity';
 import { ImageEntity } from '../image-module/image.entity';
 
-// Article:
-// -id uuid
-// -idCat uuid
-// -title text
-// -content text
-// -thumbnail string
-// -createDate string
-// -category: [category]
-// -gallery: [Image]
-
 @Entity('article')
 export class ArticleEntity {
     @PrimaryGeneratedColumn('uuid')

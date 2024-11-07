@@ -11,5 +11,4 @@ export default interface Article {
     describe: string;
     createDate: string;
     category: Category;
-    gallery?: Image[];
 }

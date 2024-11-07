@@ -10,8 +10,7 @@ export default function entityToArticle(entity: ArticleEntity): Article {
         content: entity.content,
         thumbnail: entity.thumbnail,
         describe : entity.describe,
-        createDate:entity.createDate.toString(),
-        category: entityToCategory(entity.category),
-        gallery: entity.gallery ? entity.gallery.map(image => entityToImage(image)) : []
+        createDate:entity.createDate.toLocaleDateString("en-GB"),
+        category: entityToCategory(entity.category)
     })
 }

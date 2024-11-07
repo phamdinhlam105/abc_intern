@@ -1,6 +1,7 @@
 import { IsDateString, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class CreateImageDto {
+    @IsString()
     @IsUUID()
     idArticle: string;
 
@@ -8,7 +9,6 @@ export class CreateImageDto {
     @IsString()
     describe: string;
 
-    @IsNotEmpty()
     @IsDateString()
     createDate: string;
 

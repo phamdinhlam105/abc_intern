@@ -19,75 +19,83 @@ export class ImageService {
         private articleRepository: Repository<ArticleEntity>
     ) { }
 
+    private idValid(id: string) {
+        if (!validate(id))
+            throw new HttpException('invalid id', HttpStatus.BAD_REQUEST);
+    }
+    private dateFormatValid(date: string) {
+        const parseDate = new Date(date);
+        if (parseDate.toString() === 'Invalid Date')
+            throw new HttpException('invalid date format', HttpStatus.BAD_REQUEST);
+
+    }
+
     async createImage(image: CreateImageDto): Promise<Image> {
         const newImageEntity = new ImageEntity();
-        newImageEntity.describe = image.describe;
-        newImageEntity.createDate = image.createDate ? new Date(image.createDate) : new Date();
-        newImageEntity.url = image.url;
-        if (image.idArticle) {
-            const oldArticle = await this.articleRepository.findOneBy({ id: image.idArticle as UUID });
-            if (oldArticle) {
-                newImageEntity.idArticle = image.idArticle as UUID;
-                newImageEntity.article = oldArticle;
-                await this.imageRepository.save(newImageEntity);
-                oldArticle.gallery.push(newImageEntity);
-                await this.articleRepository.save(oldArticle);
-            }
+        const { createDate, idArticle, ...rest } = image;
+        this.dateFormatValid(createDate);
+        newImageEntity.createDate = createDate ? new Date(createDate) : new Date();
+        Object.assign(newImageEntity, rest);
+        if (idArticle) {
+            const article = await this.articleRepository.findOneBy({ id: idArticle as UUID });
+            if (!article)
+                throw new HttpException('article id not found', HttpStatus.NOT_FOUND);
+            newImageEntity.article = article;
         }
-        else
-            await this.imageRepository.save(newImageEntity);
-
+        await this.imageRepository.save(newImageEntity);
         return entityToImage(newImageEntity);
     }
 
     async getAllImages(): Promise<Image[]> {
-        const images = await this.imageRepository.find();
+        const images = await this.imageRepository.find({ relations: { article: true } });
         return images.map(entityToImage);
     }
 
     async getImageById(id: string): Promise<Image | null> {
-        if (!validate(id))
-            throw new HttpException('invalid id', HttpStatus.BAD_REQUEST);
-        const idUUID = id as UUID;
-        const image = await this.imageRepository.findOneBy({ id: idUUID });
-        if (image)
-            return entityToImage(image);
-        throw new HttpException('id not found ', HttpStatus.NOT_FOUND);
+        this.idValid(id);
+        const image = await this.imageRepository.findOne({ where: { id: id as UUID }, relations: { article: true } });
+        if (!image)
+            throw new HttpException('id not found ', HttpStatus.NOT_FOUND);
+        return entityToImage(image);
+
     }
 
-    async updateImage(id: string, updatedImage: Partial<Image>): Promise<Image> {
-        if (!validate(id))
-            throw new HttpException('invalid id', HttpStatus.BAD_REQUEST);
-        const idUUID = id as UUID;
-        const updatedImageEntity = await this.imageRepository.findOneBy({ id: idUUID });
-        if (updatedImageEntity) {
-            updatedImageEntity.describe = updatedImage.describe;
-            updatedImageEntity.url = updatedImage.url;
-            updatedImageEntity.createDate = new Date(updatedImage.createDate);
-            if (updatedImage.idArticle && updatedImage.idArticle !== updatedImageEntity.idArticle) {
-                const oldArticle = await this.articleRepository.findOne({ where: { id: updatedImage.idArticle as UUID }, relations: { gallery: true } });
-                oldArticle.gallery = oldArticle.gallery.filter(img => img.id !== updatedImage.id);
-                const newArticle = await this.articleRepository.findOne({ where: { id: updatedImage.id }, relations: { gallery: true } });
-                newArticle.gallery.push(updatedImageEntity);
-                this.articleRepository.save(oldArticle);
-                this.articleRepository.save(newArticle);
-                updatedImageEntity.idArticle = updatedImage.idArticle;
-            }
-            this.imageRepository.save(updatedImageEntity);
-            return entityToImage(updatedImageEntity);
+    async updateImage(id: string, updatedImage: Partial<CreateImageDto>): Promise<Image> {
+        this.idValid(id);
+        const updatedImageEntity = await this.imageRepository.findOne({ where: { id: id as UUID }, relations: { article: true } });
+        if (!updatedImageEntity)
+            throw new HttpException('id not found ', HttpStatus.NOT_FOUND);
+        const { idArticle, createDate, ...rest } = updatedImage;
+        if (createDate) {
+            this.dateFormatValid(createDate);
+            updatedImageEntity.createDate = new Date(createDate);
         }
-        throw new HttpException('id not found ', HttpStatus.NOT_FOUND);
+        Object.assign(updatedImageEntity, rest);
+        if (idArticle && idArticle !== updatedImageEntity.id) {
+            const newArticle = await this.articleRepository.findOneBy({ id: idArticle as UUID });
+            if (!newArticle)
+                throw new HttpException('id article not found', HttpStatus.NOT_FOUND);
+            updatedImageEntity.article = newArticle;
+        }
+        this.imageRepository.save(updatedImageEntity);
+        return entityToImage(updatedImageEntity);
     }
 
     async deleteImage(id: string) {
-        if (!validate(id))
-            throw new HttpException('invalid id', HttpStatus.BAD_REQUEST);
-        const idUUID = id as UUID;
-        const deleteImage = await this.imageRepository.findOneBy({ id: idUUID });
-        if (deleteImage) {
-            await this.imageRepository.delete(idUUID);
-            return { message: 'Image deleted successfully', status: HttpStatus.OK };
-        }
-        throw new HttpException('Image not found', HttpStatus.NOT_FOUND);
+        this.idValid(id);
+        const deleteImage = await this.imageRepository.findOneBy({ id: id as UUID });
+        if (!deleteImage)
+            throw new HttpException('Image not found', HttpStatus.NOT_FOUND);
+        await this.imageRepository.delete(id as UUID);
+        return { message: 'Image deleted successfully', status: HttpStatus.OK };
+    }
+
+    async getByArticle(id: string) {
+        this.idValid(id);
+        const article = await this.articleRepository.findBy({ id: id as UUID })
+        if (!article)
+            throw new HttpException('id article not found', HttpStatus.NOT_FOUND);
+        const imagesByArticle = await this.imageRepository.find({ where: { article: article }, relations: { article: true } });
+        return imagesByArticle.map(entityToImage);
     }
 }

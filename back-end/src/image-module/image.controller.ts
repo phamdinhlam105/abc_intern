@@ -1,5 +1,5 @@
 import { ImageService } from './image.service';
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { CreateImageDto } from './image.dto';
 import Image from './image.interface';
 
@@ -20,15 +20,20 @@ export class ImageController {
     @Get(':id')
     async getImageById(@Param('id') id: string): Promise<Image> {
         return await this.imageService.getImageById(id);
-
     }
-    @Post(':id')
+
+    @Put(':id')
     async updateImage(@Param('id') id: string, @Body() req: Partial<Image>): Promise<any> {
         return await this.imageService.updateImage(id, req);
-
     }
+
     @Delete(':id')
-    async deleteImage(@Param('id') id: string) {
+    async deleteImage(@Param('id') id: string): Promise<any> {
         await this.imageService.deleteImage(id);
+    }
+
+    @Get('getByArticle/:id')
+    async getByArticle(@Param('id') id: string) {
+        return await this.imageService.getByArticle(id);
     }
 }
