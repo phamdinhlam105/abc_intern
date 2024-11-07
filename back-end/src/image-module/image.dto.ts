@@ -1,4 +1,4 @@
-import { IsDateString, IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CreateImageDto {
     @IsString()
@@ -9,7 +9,8 @@ export class CreateImageDto {
     @IsString()
     describe: string;
 
-    @IsDateString()
+    @IsOptional()
+    @IsString()
     createDate: string;
 
     @IsNotEmpty()

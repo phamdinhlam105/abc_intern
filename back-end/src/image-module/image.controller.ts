@@ -1,5 +1,5 @@
 import { ImageService } from './image.service';
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CreateImageDto } from './image.dto';
 import Image from './image.interface';
 
@@ -8,6 +8,7 @@ export class ImageController {
     constructor(private imageService: ImageService) { }
 
     @Post()
+    @UsePipes(new ValidationPipe({ transform: true }))
     async createImage(@Body() req: CreateImageDto): Promise<Image> {
         return await this.imageService.createImage(req);
     }
@@ -23,7 +24,8 @@ export class ImageController {
     }
 
     @Put(':id')
-    async updateImage(@Param('id') id: string, @Body() req: Partial<Image>): Promise<any> {
+    @UsePipes(new ValidationPipe({ transform: true }))
+    async updateImage(@Param('id') id: string, @Body() req: Partial<CreateImageDto>): Promise<any> {
         return await this.imageService.updateImage(id, req);
     }
 

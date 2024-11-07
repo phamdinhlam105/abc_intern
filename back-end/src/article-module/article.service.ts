@@ -36,7 +36,8 @@ export class ArticleService {
         if (!category)
             throw new HttpException('id category not found', HttpStatus.NOT_FOUND);
         newArticle.category = category;
-        this.dateFormatValid(createDate);
+        if (createDate)
+            this.dateFormatValid(createDate);
         newArticle.createDate = createDate ? new Date(createDate) : new Date();
         Object.assign(newArticle, rest);
         await this.articleRepository.save(newArticle);

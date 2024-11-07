@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ArticleService } from './article.service';
 import { CreateArticleDto } from './article.dto';
 import Article from './article.interface';
@@ -8,6 +8,7 @@ export class ArticleController {
     constructor(private articleService: ArticleService) { }
 
     @Post()
+    @UsePipes(new ValidationPipe({ transform: true }))
     async createArticle(@Body() req: CreateArticleDto): Promise<Article> {
         return await this.articleService.createArticle(req);
     }
@@ -23,7 +24,8 @@ export class ArticleController {
 
     }
     @Put(':id')
-    async updateArticle(@Param('id') id: string, @Body() req: CreateArticleDto): Promise<any> {
+    @UsePipes(new ValidationPipe({ transform: true }))
+    async updateArticle(@Param('id') id: string, @Body() req: Partial<CreateArticleDto>): Promise<any> {
         return await this.articleService.updateArticle(id, req);
 
     }

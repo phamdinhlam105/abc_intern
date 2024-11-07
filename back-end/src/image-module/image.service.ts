@@ -33,7 +33,8 @@ export class ImageService {
     async createImage(image: CreateImageDto): Promise<Image> {
         const newImageEntity = new ImageEntity();
         const { createDate, idArticle, ...rest } = image;
-        this.dateFormatValid(createDate);
+        if (createDate)
+            this.dateFormatValid(createDate);
         newImageEntity.createDate = createDate ? new Date(createDate) : new Date();
         Object.assign(newImageEntity, rest);
         if (idArticle) {
