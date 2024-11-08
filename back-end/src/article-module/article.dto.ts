@@ -1,22 +1,18 @@
-
-import { Expose } from 'class-transformer';
+import { PartialType } from '@nestjs/mapped-types';
 import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class CreateArticleDto {
 
     @IsUUID()
     @IsNotEmpty()
-    @Expose()
     idCategory: string;
 
     @IsString()
     @IsNotEmpty()
-    @Expose()
     title: string;
 
     @IsString()
     @IsNotEmpty()
-    @Expose()
     content: string;
     
     @IsString()
@@ -25,7 +21,8 @@ export class CreateArticleDto {
 
     @IsString()
     @IsNotEmpty()
-    @Expose()
     thumbnail: string;
     
 }
+
+export class UpdateArticlDto extends PartialType(CreateArticleDto){}

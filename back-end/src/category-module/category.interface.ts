@@ -1,7 +1,7 @@
 
-export default interface Category {
+export default interface ICategory {
     id: string;
     name: string;
     slug: string;
-    parentCategory?: Category;
+    parentCategory?: ICategory;
 }

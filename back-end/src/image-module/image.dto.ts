@@ -1,19 +1,18 @@
-import { Expose } from 'class-transformer';
-import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+import { PartialType } from '@nestjs/mapped-types';
+import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class CreateImageDto {
     @IsString()
     @IsUUID()
-    @Expose()
     idArticle: string;
 
     @IsNotEmpty()
     @IsString()
-    @Expose()
     describe: string;
 
     @IsNotEmpty()
     @IsString()
-    @Expose()
     url: string;
 }
+
+export class UpdateImageDto extends PartialType(CreateImageDto){}

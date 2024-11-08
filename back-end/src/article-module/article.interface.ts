@@ -1,11 +1,11 @@
-import Category from "src/category-module/category.interface";
+import ICategory from "src/category-module/category.interface";
 
-export default interface Article {
+export default interface IArticle {
     id: string;
     title: string;
     content: string;
     thumbnail: string;
     describe: string;
     createDate: string;
-    category: Category;
+    category: ICategory;
 }

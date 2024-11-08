@@ -1,11 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, TreeRepositoryUtils } from "typeorm";
+import { Repository } from "typeorm";
 import { validate } from 'uuid'
 import { CategoryEntity } from "./category.entity";
-import { CategoryDto } from "./category.dto";
-import entityToCategory from "./category.util";
-import Category from "./category.interface";
+import { CreateCategoryDto, UpdateCategoryDto } from "./category.dto";
+import convertEntityToCategory from "./category.util";
+import ICategory from "./category.interface";
 
 @Injectable()
 export class CategoryService {
@@ -32,7 +32,7 @@ export class CategoryService {
         return false;
     }
 
-    async createCategory(createCategoryDto: CategoryDto): Promise<Category> {
+    async createCategory(createCategoryDto: CreateCategoryDto): Promise<ICategory> {
         const newCategory = new CategoryEntity();
         if (createCategoryDto.parentId) {
             const parentCategory = await this.categoryRepository.findOneBy({ id: createCategoryDto.parentId, isActive: true });
@@ -42,18 +42,18 @@ export class CategoryService {
         }
         Object.assign(newCategory, createCategoryDto);
         await this.categoryRepository.save(newCategory);
-        return entityToCategory(newCategory);
+        return convertEntityToCategory(newCategory);
     }
 
-    async getAllCategories(): Promise<Category[]> {
+    async getAllCategories(): Promise<ICategory[]> {
         const categories = await this.categoryRepository.find({
             where: { isActive: true },
             relations: { parentCategory: true }
         });
-        return categories.map(entityToCategory);
+        return categories.map(convertEntityToCategory);
     }
 
-    async getCategoryById(id: string): Promise<Category | null> {
+    async getCategoryById(id: string): Promise<ICategory | null> {
         this.checkIdIsValid(id);
         const category = await this.categoryRepository.findOne({
             where: { id: id, isActive: true },
@@ -61,10 +61,10 @@ export class CategoryService {
         });
         if (!category)
             throw new HttpException('id not found ', HttpStatus.NOT_FOUND);
-        return entityToCategory(category);
+        return convertEntityToCategory(category);
     }
 
-    async updateCategory(id: string, updatedCategoryDto: Partial<CategoryDto>): Promise<Category> {
+    async updateCategory(id: string, updatedCategoryDto: UpdateCategoryDto): Promise<ICategory> {
         this.checkIdIsValid(id);
         const updatedCategoryEntity = await this.categoryRepository.findOne({
             where: { id: id, isActive: true },
@@ -88,7 +88,7 @@ export class CategoryService {
                 updatedCategoryEntity.parentCategory = null;
         }
         await this.categoryRepository.save(updatedCategoryEntity);
-        return entityToCategory(updatedCategoryEntity);
+        return convertEntityToCategory(updatedCategoryEntity);
     }
 
     async deleteCategory(id: string) {
@@ -105,6 +105,6 @@ export class CategoryService {
         });
         deleteCategory.isActive = false;
         this.categoryRepository.save(deleteCategory);
-        return { message: 'Category deleted', deletedArticle: entityToCategory(deleteCategory) };
+        return { message: 'Category deleted', deletedArticle: convertEntityToCategory(deleteCategory) };
     }
 }

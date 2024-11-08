@@ -1,12 +1,12 @@
-import entityToArticle from "src/article-module/article.util";
+import convertEntityToArticle from "src/article-module/article.util";
 import { ImageEntity } from "./image.entity";
-import Image from './image.interface';
+import IImage from './image.interface';
 
-export default function entityToImage(imageEntity: ImageEntity): Image {
+export default function convertEntityToImage(imageEntity: ImageEntity): IImage {
    if (imageEntity)
       return ({
          id: imageEntity.id,
-         article: entityToArticle(imageEntity.article),
+         article: convertEntityToArticle(imageEntity.article),
          describe: imageEntity.describe,
          createDate: imageEntity.createDate.toLocaleDateString("en-GB"),
          url: imageEntity.url

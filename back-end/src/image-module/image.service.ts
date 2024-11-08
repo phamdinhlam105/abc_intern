@@ -1,14 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import Image from './image.interface'
+import IImage from './image.interface'
 import { ImageEntity } from "src/image-module/image.entity";
 import { Repository } from "typeorm";
-import { UUID } from "crypto";
-import entityToImage from "./image.util";
+import convertEntityToImage from "./image.util";
 import { validate } from 'uuid'
-import { CreateImageDto } from "./image.dto";
+import { CreateImageDto, UpdateImageDto } from "./image.dto";
 import { ArticleEntity } from "src/article-module/article.entity";
-import { plainToClass } from "class-transformer";
 
 @Injectable()
 export class ImageService {
@@ -25,9 +23,9 @@ export class ImageService {
             throw new HttpException('invalid id', HttpStatus.BAD_REQUEST);
     }
 
-    async createImage(image: CreateImageDto): Promise<Image> {
+    async createImage(createImageDto: CreateImageDto): Promise<IImage> {
         const newImageEntity = new ImageEntity();
-        const { idArticle, ...rest } = image;
+        const { idArticle, ...rest } = createImageDto;
         Object.assign(newImageEntity, rest);
         if (idArticle) {
             const article = await this.articleRepository.findOneBy({ id: idArticle, isActive: true });
@@ -36,29 +34,29 @@ export class ImageService {
             newImageEntity.article = article;
         }
         await this.imageRepository.save(newImageEntity);
-        return entityToImage(newImageEntity);
+        return convertEntityToImage(newImageEntity);
     }
 
-    async getAllImages(): Promise<Image[]> {
+    async getAllImages(): Promise<IImage[]> {
         const images = await this.imageRepository.find({
             where: { isActive: true },
             relations: { article: true }
         });
-        return images.map(entityToImage);
+        return images.map(convertEntityToImage);
     }
 
-    async getImageById(id: string): Promise<Image | null> {
+    async getImageById(id: string): Promise<IImage | null> {
         this.checkIdIsValid(id);
         const image = await this.imageRepository.findOne({
-            where: { id: id as UUID },
+            where: { id: id, isActive: true },
             relations: { article: true }
         });
         if (!image)
             throw new HttpException('id not found ', HttpStatus.NOT_FOUND);
-        return entityToImage(image);
+        return convertEntityToImage(image);
     }
 
-    async updateImage(id: string, updatedImageDto: Partial<CreateImageDto>): Promise<Image> {
+    async updateImage(id: string, updatedImageDto: UpdateImageDto): Promise<IImage> {
         this.checkIdIsValid(id);
         const updatedImageEntity = await this.imageRepository.findOne({
             where: { id: id, isActive: true },
@@ -66,8 +64,7 @@ export class ImageService {
         });
         if (!updatedImageEntity)
             throw new HttpException('id not found ', HttpStatus.NOT_FOUND);
-        const updateImage = plainToClass(CreateImageDto, updatedImageDto, { excludeExtraneousValues: true });
-        const { idArticle, ...rest } = updateImage;
+        const { idArticle, ...rest } = updatedImageDto;
         Object.assign(updatedImageEntity, rest);
         if (idArticle && idArticle !== updatedImageEntity.article.id) {
             const newArticle = await this.articleRepository.findOneBy({ id: idArticle, isActive: true });
@@ -76,7 +73,7 @@ export class ImageService {
             updatedImageEntity.article = newArticle;
         }
         this.imageRepository.save(updatedImageEntity);
-        return entityToImage(updatedImageEntity);
+        return convertEntityToImage(updatedImageEntity);
     }
 
     async deleteImage(id: string) {
@@ -89,10 +86,10 @@ export class ImageService {
             throw new HttpException('Image not found', HttpStatus.NOT_FOUND);
         deleteImage.isActive = false;
         this.imageRepository.save(deleteImage);
-        return { message: 'Image deleted successfully', deletedImage: entityToImage(deleteImage) };
+        return { message: 'Image deleted successfully', deletedImage: convertEntityToImage(deleteImage) };
     }
 
-    async getByArticle(id: string): Promise<Image[]> {
+    async getByArticle(id: string): Promise<IImage[]> {
         this.checkIdIsValid(id);
         const article = await this.articleRepository.findOneBy({ id: id, isActive: true });
         if (!article)
@@ -100,6 +97,6 @@ export class ImageService {
         const imagesByArticle = await this.imageRepository.find({
             where: { article: { id: article.id }, isActive: true }
         });
-        return imagesByArticle.map(entityToImage);
+        return imagesByArticle.map(convertEntityToImage);
     }
 }

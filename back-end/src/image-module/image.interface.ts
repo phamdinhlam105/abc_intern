@@ -1,8 +1,8 @@
-import Article from "src/article-module/article.interface";
+import IArticle from "src/article-module/article.interface";
 
-export default interface Image {
+export default interface IImage {
     id: string;
-    article: Article;
+    article: IArticle;
     describe: string;
     url: string;
     createDate:string;

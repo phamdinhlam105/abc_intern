@@ -1,8 +1,8 @@
-import entityToCategory from "src/category-module/category.util";
+import convertEntityCategory from "src/category-module/category.util";
 import { ArticleEntity } from "./article.entity";
-import Article from "./article.interface";
+import IArticle from "./article.interface";
 
-export default function entityToArticle(entity: ArticleEntity): Article {
+export default function convertEntityToArticle(entity: ArticleEntity): IArticle {
     if (entity)
         return ({
             id: entity.id,
@@ -11,7 +11,7 @@ export default function entityToArticle(entity: ArticleEntity): Article {
             thumbnail: entity.thumbnail,
             describe: entity.describe,
             createDate: entity.createDate.toLocaleDateString("en-GB"),
-            category: entityToCategory(entity.category)
+            category: convertEntityCategory(entity.category)
         });
     return null
 }
