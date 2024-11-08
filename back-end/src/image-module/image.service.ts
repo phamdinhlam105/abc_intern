@@ -67,7 +67,6 @@ export class ImageService {
         if (!updatedImageEntity)
             throw new HttpException('id not found ', HttpStatus.NOT_FOUND);
         const updateImage = plainToClass(CreateImageDto, updatedImageDto, { excludeExtraneousValues: true });
-        console.log(updateImage);
         const { idArticle, ...rest } = updateImage;
         Object.assign(updatedImageEntity, rest);
         if (idArticle && idArticle !== updatedImageEntity.article.id) {
@@ -90,8 +89,7 @@ export class ImageService {
             throw new HttpException('Image not found', HttpStatus.NOT_FOUND);
         deleteImage.isActive = false;
         this.imageRepository.save(deleteImage);
-        const { isActive, ...returnImage } = deleteImage;
-        return { message: 'Image deleted successfully', deletedImage: returnImage };
+        return { message: 'Image deleted successfully', deletedImage: entityToImage(deleteImage) };
     }
 
     async getByArticle(id: string): Promise<Image[]> {

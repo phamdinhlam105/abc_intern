@@ -9,6 +9,7 @@ import { CategoryEntity } from "src/category-module/category.entity";
 import entityToArticle from "./article.util";
 import { ImageEntity } from "src/image-module/image.entity";
 import { plainToClass } from "class-transformer";
+import entityToImage from "src/image-module/image.util";
 
 @Injectable()
 export class ArticleService {
@@ -94,9 +95,11 @@ export class ArticleService {
         }
         deleteArticle.isActive = false;
         await this.articleRepository.save(deleteArticle);
-        const { isActive, gallery, ...returnArticle } = deleteArticle;
-        const filteredGallery = gallery.map(({ isActive, ...image }) => image);
-        return { message: 'Article deleted', deletedArticle: { ...returnArticle, gallery: filteredGallery } };
+        return {
+            message: 'Article deleted',
+            deletedArticle: entityToArticle(deleteArticle),
+            deletedImage: deleteArticle.gallery.map(entityToImage)
+        };
 
     }
 

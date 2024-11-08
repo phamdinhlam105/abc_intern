@@ -105,7 +105,6 @@ export class CategoryService {
         });
         deleteCategory.isActive = false;
         this.categoryRepository.save(deleteCategory);
-        const { isActive,subCategories, ...returnCategory } = deleteCategory;
-        return { message: 'Category deleted', deletedArticle: returnCategory };
+        return { message: 'Category deleted', deletedArticle: entityToCategory(deleteCategory) };
     }
 }
