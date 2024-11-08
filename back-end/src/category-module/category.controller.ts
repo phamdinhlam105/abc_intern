@@ -28,7 +28,7 @@ export class CategoryController {
         return await this.categoryService.updateCategory(id, req);
     }
     @Delete('/:id')
-    async deleteImage(@Param('id') id: string) {
-        await this.categoryService.deleteCategory(id);
+    async deleteImage(@Param('id') id: string): Promise<any> {
+        return await this.categoryService.deleteCategory(id);
     }
 }

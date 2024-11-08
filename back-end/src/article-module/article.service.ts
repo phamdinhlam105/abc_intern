@@ -1,13 +1,14 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { UUID } from "crypto";
 import { validate } from 'uuid';
 import { ArticleEntity } from "./article.entity";
 import { CreateArticleDto } from "./article.dto";
 import Article from "./article.interface";
 import { CategoryEntity } from "src/category-module/category.entity";
-import entityToArticle from "./article.ulti";
+import entityToArticle from "./article.util";
+import { ImageEntity } from "src/image-module/image.entity";
+import { plainToClass } from "class-transformer";
 
 @Injectable()
 export class ArticleService {
@@ -15,61 +16,60 @@ export class ArticleService {
         @InjectRepository(ArticleEntity)
         private articleRepository: Repository<ArticleEntity>,
         @InjectRepository(CategoryEntity)
-        private categoryRepository: Repository<CategoryEntity>
+        private categoryRepository: Repository<CategoryEntity>,
+        @InjectRepository(ImageEntity)
+        private imageRepository: Repository<ImageEntity>
     ) { }
 
-    private idValid(id: string) {
+    private checkIdIsValid(id: string) {
         if (!validate(id))
             throw new HttpException('invalid id', HttpStatus.BAD_REQUEST);
     }
 
-    private dateFormatValid(date: string) {
-        const parseDate = new Date(date);
-        if (parseDate.toString() === 'Invalid Date')
-            throw new HttpException('invalid date format', HttpStatus.BAD_REQUEST);
-    }
-
-    async createArticle(article: CreateArticleDto): Promise<Article> {
+    async createArticle(createArticleDto: CreateArticleDto): Promise<Article> {
         const newArticle = new ArticleEntity();
-        const { createDate, idCategory, ...rest } = article;
-        const category = await this.categoryRepository.findOneBy({ id: idCategory });
+        const { idCategory, ...rest } = createArticleDto;
+        const category = await this.categoryRepository.findOneBy({ id: idCategory, isActive: true });
         if (!category)
             throw new HttpException('id category not found', HttpStatus.NOT_FOUND);
         newArticle.category = category;
-        if (createDate)
-            this.dateFormatValid(createDate);
-        newArticle.createDate = createDate ? new Date(createDate) : new Date();
         Object.assign(newArticle, rest);
         await this.articleRepository.save(newArticle);
         return entityToArticle(newArticle);
     }
 
     async getAllArticle(): Promise<Article[]> {
-        const categories = await this.articleRepository.find({ relations: { category: true } });
+        const categories = await this.articleRepository.find({
+            where: { isActive: true },
+            relations: { category: true }
+        });
         return categories.map(entityToArticle);
     }
 
     async getArticleById(id: string): Promise<Article | null> {
-        this.idValid(id);
-        const article = await this.articleRepository.findOne({ where: { id: id as UUID }, relations: { category: true } });
+        this.checkIdIsValid(id);
+        const article = await this.articleRepository.findOne({
+            where: { id: id, isActive: true },
+            relations: { category: true }
+        });
         if (article)
             return entityToArticle(article);
         throw new HttpException('id not found ', HttpStatus.NOT_FOUND);
     }
 
-    async updateArticle(id: string, updatedArticle: Partial<CreateArticleDto>): Promise<Article> {
-        this.idValid(id);
-        const updatedArticleEntity = await this.articleRepository.findOneBy({ id: id as UUID })
+    async updateArticle(id: string, updatedArticleDto: Partial<CreateArticleDto>): Promise<Article> {
+        this.checkIdIsValid(id);
+        const updatedArticleEntity = await this.articleRepository.findOne({
+            where: { id: id, isActive: true },
+            relations: { category: true }
+        });
         if (!updatedArticleEntity)
             throw new HttpException('id not found', HttpStatus.NOT_FOUND);
-        const { idCategory, createDate, ...rest } = updatedArticle;
+        const updateArticle = plainToClass(CreateArticleDto, updatedArticleDto, { excludeExtraneousValues: true });
+        const { idCategory, ...rest } = updateArticle;
         Object.assign(updatedArticleEntity, rest)
-        if (createDate) {
-            this.dateFormatValid(createDate);
-            updatedArticleEntity.createDate = new Date(createDate);
-        }
         if (idCategory) {
-            const category = await this.categoryRepository.findOneBy({ id: idCategory });
+            const category = await this.categoryRepository.findOneBy({ id: idCategory, isActive: true });
             if (!category)
                 throw new HttpException('id category not found', HttpStatus.NOT_FOUND);
             updatedArticleEntity.category = category;
@@ -79,24 +79,35 @@ export class ArticleService {
     }
 
     async deleteArticle(id: string) {
-        this.idValid(id);
-        const deleteArticle = await this.articleRepository.findOneBy({ id: id as UUID });
+        this.checkIdIsValid(id);
+        const deleteArticle = await this.articleRepository.findOne({
+            where: { id: id, isActive: true },
+            relations: { gallery: true }
+        });
         if (!deleteArticle)
-            throw new HttpException('Category not found', HttpStatus.NOT_FOUND);
-        try {
-            await this.articleRepository.delete(deleteArticle);
-            return { message: 'Article deleted successfully', status: HttpStatus.OK };
+            throw new HttpException('id article not found', HttpStatus.NOT_FOUND);
+        for (const image of deleteArticle.gallery) {
+            if (image.isActive) {
+                image.isActive = false;
+                await this.imageRepository.save(image);
+            }
         }
-        catch (error) {
-            throw new HttpException('Article can not be deleted', HttpStatus.CONFLICT);
-        }
+        deleteArticle.isActive = false;
+        await this.articleRepository.save(deleteArticle);
+        const { isActive, gallery, ...returnArticle } = deleteArticle;
+        const filteredGallery = gallery.map(({ isActive, ...image }) => image);
+        return { message: 'Article deleted', deletedArticle: { ...returnArticle, gallery: filteredGallery } };
+
     }
 
     async getByCategory(idCategory: string): Promise<Article[]> {
-        this.idValid(idCategory);
-        const idUUID = idCategory as UUID;
-        const category = await this.categoryRepository.findBy({ id: idUUID });
-        const listArticle = await this.articleRepository.findBy({ category: category });
-        return listArticle.map(entityToArticle);
+        this.checkIdIsValid(idCategory);
+        const category = await this.categoryRepository.findOneBy({ id: idCategory, isActive: true });
+        if (!category)
+            throw new HttpException('id category not found', HttpStatus.NOT_FOUND);
+        const articleByCategory = await this.articleRepository.findBy({
+            category: { id: category.id }, isActive: true
+        });
+        return articleByCategory.map(entityToArticle);
     }
 }

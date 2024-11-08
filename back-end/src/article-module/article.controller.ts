@@ -8,7 +8,7 @@ export class ArticleController {
     constructor(private articleService: ArticleService) { }
 
     @Post()
-    @UsePipes(new ValidationPipe({ transform: true }))
+    @UsePipes(new ValidationPipe())
     async createArticle(@Body() req: CreateArticleDto): Promise<Article> {
         return await this.articleService.createArticle(req);
     }
@@ -24,14 +24,14 @@ export class ArticleController {
 
     }
     @Put(':id')
-    @UsePipes(new ValidationPipe({ transform: true }))
+    @UsePipes(new ValidationPipe())
     async updateArticle(@Param('id') id: string, @Body() req: Partial<CreateArticleDto>): Promise<any> {
         return await this.articleService.updateArticle(id, req);
 
     }
     @Delete(':id')
     async deleteArticle(@Param('id') id: string): Promise<any> {
-        await this.articleService.deleteArticle(id);
+        return await this.articleService.deleteArticle(id);
     }
     @Get('getByCategory/:id')
     async getById(@Param('id') id: string): Promise<Article[]> {

@@ -6,7 +6,7 @@ import { ImageController } from "./image.controller";
 import { ArticleEntity } from "src/article-module/article.entity";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ImageEntity]), TypeOrmModule.forFeature([ArticleEntity])],
+  imports: [TypeOrmModule.forFeature([ImageEntity,ArticleEntity])],
   controllers: [ImageController],
   providers: [ImageService],
 })

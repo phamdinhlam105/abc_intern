@@ -31,11 +31,11 @@ export class ImageController {
 
     @Delete(':id')
     async deleteImage(@Param('id') id: string): Promise<any> {
-        await this.imageService.deleteImage(id);
+        return await this.imageService.deleteImage(id);
     }
 
     @Get('getByArticle/:id')
-    async getByArticle(@Param('id') id: string) {
+    async getByArticle(@Param('id') id: string) :Promise<Image[]>{
         return await this.imageService.getByArticle(id);
     }
 }

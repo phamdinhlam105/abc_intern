@@ -1,7 +1,6 @@
-import { UUID } from "crypto";
 
 export default interface Category {
-    id: UUID;
+    id: string;
     name: string;
     slug: string;
     parentCategory?: Category;

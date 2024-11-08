@@ -1,19 +1,22 @@
 
-import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
-import { UUID } from 'crypto';
+import { Expose } from 'class-transformer';
+import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class CreateArticleDto {
 
     @IsUUID()
     @IsNotEmpty()
-    idCategory: UUID;
+    @Expose()
+    idCategory: string;
 
     @IsString()
     @IsNotEmpty()
+    @Expose()
     title: string;
 
     @IsString()
     @IsNotEmpty()
+    @Expose()
     content: string;
     
     @IsString()
@@ -22,10 +25,7 @@ export class CreateArticleDto {
 
     @IsString()
     @IsNotEmpty()
+    @Expose()
     thumbnail: string;
-
-    @IsOptional()
-    @IsString()
-    createDate: string;
     
 }

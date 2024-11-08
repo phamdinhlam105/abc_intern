@@ -4,10 +4,11 @@ import Image from './image.interface'
 import { ImageEntity } from "src/image-module/image.entity";
 import { Repository } from "typeorm";
 import { UUID } from "crypto";
-import entityToImage from "./image.ulti";
+import entityToImage from "./image.util";
 import { validate } from 'uuid'
 import { CreateImageDto } from "./image.dto";
 import { ArticleEntity } from "src/article-module/article.entity";
+import { plainToClass } from "class-transformer";
 
 @Injectable()
 export class ImageService {
@@ -19,26 +20,17 @@ export class ImageService {
         private articleRepository: Repository<ArticleEntity>
     ) { }
 
-    private idValid(id: string) {
+    private checkIdIsValid(id: string) {
         if (!validate(id))
             throw new HttpException('invalid id', HttpStatus.BAD_REQUEST);
-    }
-    private dateFormatValid(date: string) {
-        const parseDate = new Date(date);
-        if (parseDate.toString() === 'Invalid Date')
-            throw new HttpException('invalid date format', HttpStatus.BAD_REQUEST);
-
     }
 
     async createImage(image: CreateImageDto): Promise<Image> {
         const newImageEntity = new ImageEntity();
-        const { createDate, idArticle, ...rest } = image;
-        if (createDate)
-            this.dateFormatValid(createDate);
-        newImageEntity.createDate = createDate ? new Date(createDate) : new Date();
+        const { idArticle, ...rest } = image;
         Object.assign(newImageEntity, rest);
         if (idArticle) {
-            const article = await this.articleRepository.findOneBy({ id: idArticle as UUID });
+            const article = await this.articleRepository.findOneBy({ id: idArticle, isActive: true });
             if (!article)
                 throw new HttpException('article id not found', HttpStatus.NOT_FOUND);
             newImageEntity.article = article;
@@ -48,32 +40,38 @@ export class ImageService {
     }
 
     async getAllImages(): Promise<Image[]> {
-        const images = await this.imageRepository.find({ relations: { article: true } });
+        const images = await this.imageRepository.find({
+            where: { isActive: true },
+            relations: { article: true }
+        });
         return images.map(entityToImage);
     }
 
     async getImageById(id: string): Promise<Image | null> {
-        this.idValid(id);
-        const image = await this.imageRepository.findOne({ where: { id: id as UUID }, relations: { article: true } });
+        this.checkIdIsValid(id);
+        const image = await this.imageRepository.findOne({
+            where: { id: id as UUID },
+            relations: { article: true }
+        });
         if (!image)
             throw new HttpException('id not found ', HttpStatus.NOT_FOUND);
         return entityToImage(image);
-
     }
 
-    async updateImage(id: string, updatedImage: Partial<CreateImageDto>): Promise<Image> {
-        this.idValid(id);
-        const updatedImageEntity = await this.imageRepository.findOne({ where: { id: id as UUID }, relations: { article: true } });
+    async updateImage(id: string, updatedImageDto: Partial<CreateImageDto>): Promise<Image> {
+        this.checkIdIsValid(id);
+        const updatedImageEntity = await this.imageRepository.findOne({
+            where: { id: id, isActive: true },
+            relations: { article: true }
+        });
         if (!updatedImageEntity)
             throw new HttpException('id not found ', HttpStatus.NOT_FOUND);
-        const { idArticle, createDate, ...rest } = updatedImage;
-        if (createDate) {
-            this.dateFormatValid(createDate);
-            updatedImageEntity.createDate = new Date(createDate);
-        }
+        const updateImage = plainToClass(CreateImageDto, updatedImageDto, { excludeExtraneousValues: true });
+        console.log(updateImage);
+        const { idArticle, ...rest } = updateImage;
         Object.assign(updatedImageEntity, rest);
-        if (idArticle && idArticle !== updatedImageEntity.id) {
-            const newArticle = await this.articleRepository.findOneBy({ id: idArticle as UUID });
+        if (idArticle && idArticle !== updatedImageEntity.article.id) {
+            const newArticle = await this.articleRepository.findOneBy({ id: idArticle, isActive: true });
             if (!newArticle)
                 throw new HttpException('id article not found', HttpStatus.NOT_FOUND);
             updatedImageEntity.article = newArticle;
@@ -83,20 +81,27 @@ export class ImageService {
     }
 
     async deleteImage(id: string) {
-        this.idValid(id);
-        const deleteImage = await this.imageRepository.findOneBy({ id: id as UUID });
+        this.checkIdIsValid(id);
+        const deleteImage = await this.imageRepository.findOne({
+            where: { id: id, isActive: true },
+            relations: { article: true }
+        });
         if (!deleteImage)
             throw new HttpException('Image not found', HttpStatus.NOT_FOUND);
-        await this.imageRepository.delete(id as UUID);
-        return { message: 'Image deleted successfully', status: HttpStatus.OK };
+        deleteImage.isActive = false;
+        this.imageRepository.save(deleteImage);
+        const { isActive, ...returnImage } = deleteImage;
+        return { message: 'Image deleted successfully', deletedImage: returnImage };
     }
 
-    async getByArticle(id: string) {
-        this.idValid(id);
-        const article = await this.articleRepository.findBy({ id: id as UUID })
+    async getByArticle(id: string): Promise<Image[]> {
+        this.checkIdIsValid(id);
+        const article = await this.articleRepository.findOneBy({ id: id, isActive: true });
         if (!article)
             throw new HttpException('id article not found', HttpStatus.NOT_FOUND);
-        const imagesByArticle = await this.imageRepository.find({ where: { article: article }, relations: { article: true } });
+        const imagesByArticle = await this.imageRepository.find({
+            where: { article: { id: article.id }, isActive: true }
+        });
         return imagesByArticle.map(entityToImage);
     }
 }
