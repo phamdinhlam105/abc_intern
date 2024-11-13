@@ -19,3 +19,8 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.borderLine {
+  border-width: 1px;
+  border-color: #D1D5DB;
+}
