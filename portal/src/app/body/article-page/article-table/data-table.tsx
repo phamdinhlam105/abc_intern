@@ -92,6 +92,7 @@ export function DataTable<TData extends { id: string }, TValue>({
   };
   const removeFilter = () => {
     setSelectedStatuses([]);
+    setStatusSearch('');
     table.getColumn("status")?.setFilterValue(undefined);
   }
 
@@ -104,7 +105,10 @@ export function DataTable<TData extends { id: string }, TValue>({
               <ListFilter className="w-full h-full" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent side="right" align="start" className="shadow-md rounded-md"
+          <DropdownMenuContent
+            side="right"
+            align="start"
+            className="shadow-md rounded-md"
           >
             <DropdownMenuLabel className="p-2">
               <p className="font-semibold text-sm">Bộ lọc</p>
@@ -114,7 +118,8 @@ export function DataTable<TData extends { id: string }, TValue>({
                 <span>Trạng thái</span>
                 <ChevronRight />
               </DropdownMenuSubTrigger>
-              <DropdownMenuSubContent className="bg-white shadow-md rounded-md p-1">
+              <DropdownMenuSubContent
+                className="bg-white shadow-md rounded-md p-1">
                 <DropdownMenuLabel asChild>
                   <div className="flex items-center p-2 ">
                     <Search />
@@ -216,7 +221,7 @@ export function DataTable<TData extends { id: string }, TValue>({
                   onDelete(row.original.id)
                 });
               }}
-              disabled={!table.getIsSomePageRowsSelected()}
+              disabled={!table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()}
               className="px-2 w-full items-center hover:bg-gray-200 rounded-sm text-black"
             >
               <p>Xóa các dòng đã chọn</p>

@@ -1,14 +1,11 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
 import { ColumnDef } from "@tanstack/react-table"
 import ColumnHeader from "./column-header"
-import { useState } from "react"
 import ActionCell from "./action-cell"
 
-export type Article = {
+export interface Article {
     id: string,
     title: string,
     category: string,
@@ -18,19 +15,16 @@ export type Article = {
 }
 
 interface GetArticleColumnsProps {
-    onDelete: (idRow:string) => void;
+    onDelete: (idRow: string) => void;
 }
 
-export const getArticleColumns = ({ onDelete }: GetArticleColumnsProps): ColumnDef < Article >  [] => [
-     {
+export const getArticleColumns = ({ onDelete }: GetArticleColumnsProps): ColumnDef<Article>[] => [
+    {
         id: "select",
         header: ({ table }) => (
             <div className="w-8 items-center flex justify-between">
                 <Checkbox
-                    checked={
-                        table.getIsAllPageRowsSelected() ||
-                        (table.getIsSomePageRowsSelected() && "indeterminate")
-                    }
+                    checked={table.getIsAllPageRowsSelected()}
                     onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
                     aria-label="Select all"
                 />
@@ -79,8 +73,7 @@ export const getArticleColumns = ({ onDelete }: GetArticleColumnsProps): ColumnD
         id: "actions",
         header: () => <div className="flex justify-center w-28">Hành động</div>,
         cell: ({ row }) => {
-            const article = row.original
-            const [data, setData] = useState(article);
+            const article = row.original;
             return <ActionCell idRow={article.id} onDelete={onDelete} />
         },
     },
