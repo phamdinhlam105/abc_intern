@@ -1,121 +1,80 @@
-"use client"
+import * as React from "react";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
+import { Table } from "@tanstack/react-table";
 
-import FirstPageIcon from "./icons/first-page-icon";
-import LastPageIcon from "./icons/last-page-icon";
-import NextIcon from "./icons/next-icon";
-import PreviousIcon from "./icons/previous-icon";
-
-type PaginationProps = {
-  paginationList: object[];
-  numberPerPage: number;
-  setNumberPerPage: React.Dispatch<React.SetStateAction<number>>;
-  currentPage: number;
-  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
-};
-
-export default function Pagination({
-  paginationList,
-  numberPerPage,
-  setNumberPerPage,
-  currentPage,
-  setCurrentPage
-}: PaginationProps) {
-
-  const totalPages = Math.ceil(paginationList.length / numberPerPage);
-
-  const paginate = (list: object[], page: number, itemsPerPage: number) => {
-    const startIndex = page * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return list.slice(startIndex, endIndex);
+interface PaginationProps {
+  table: Table<any>;
+  pagination: {
+    pageIndex: number;
+    pageSize: number;
   };
+  setPagination: React.Dispatch<React.SetStateAction<{ pageIndex: number; pageSize: number }>>;
+}
 
-  // Chuyển số lượng item mỗi trang
-  const handleItemsPerPageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newItemsPerPage = Number(event.target.value);
-    setNumberPerPage(newItemsPerPage);
-    setCurrentPage(0);
-  };
-
-  const handlePageChange = (page: number) => {
-    if (page >= 0 && page < totalPages) {
-      setCurrentPage(page);
-    }
-  };
-
-  const getPageNumbers = () => {
-    const pages = [];
-    const range = 2; 
-    for (let i = currentPage - range; i <= currentPage + range; i++) {
-      pages.push(i);
-    }
-    return pages.filter(page => page >= 0 && page < totalPages);
-
-  };
-
+const Pagination: React.FC<PaginationProps> = ({ table, pagination, setPagination }) => {
   return (
-    <div className="mt-5 flex justify-between">
-      <div className="flex items-center">
+    <div className="flex items-center justify-between space-x-2 py-4">
+      <div>
         <select
-          id="itemsPerPage"
-          value={numberPerPage}
-          onChange={handleItemsPerPageChange}
-          className="border p-2 rounded-md"
+          id="pageSize"
+          value={pagination.pageSize}
+          onChange={(e) =>
+            setPagination((prev) => ({
+              ...prev,
+              pageSize: Number(e.target.value),
+            }))
+          }
+          className="border rounded-md p-1"
         >
-          {[5, 10, 20, 30, 40, 100].map((item) => (
-            <option key={item} value={item}>
-              {item}
+          {[5, 10, 20, 50].map((size) => (
+            <option key={size} value={size}>
+              {size}
             </option>
           ))}
         </select>
-        <span className="ml-2">/ {paginationList.length} </span>
+        <span>{' / '}{table.getRowCount()}</span>
       </div>
-
-      <div className="flex items-center justify-center mt-4 space-x-2">
-        <button
-          onClick={() => handlePageChange(0)}
-          disabled={currentPage === 0}
-          className="h-10 w-10 items-center flex justify-center hover:bg-gray-200 rounded-md disabled:opacity-50 borderLine"
+      <div>
+        <Button
+          className="mr-auto"
+          variant="outline"
+          size="sm"
+          onClick={() => table.setPageIndex(0)}
+          disabled={!table.getCanPreviousPage()}
         >
-          <FirstPageIcon/>
-        </button>
-
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 0}
-          className="h-10 w-10 items-center flex justify-center hover:bg-gray-200 rounded-md disabled:opacity-50 borderLine"
+          <ChevronsLeft />
+        </Button>
+        <Button
+          className="mr-auto"
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
         >
-          <PreviousIcon/>
-        </button>
-
-        <div className="mx-4">
-          {getPageNumbers().map((page) => (
-            <button
-              key={page}
-              onClick={() => handlePageChange(page)}
-              className={`px-4 py-2 mx-1 borderLine rounded-md ${page === currentPage ? "bg-primary text-white":"hover:bg-gray-200"
-                }`}
-            >
-              {page + 1}
-            </button>
-          ))}
-        </div>
-
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages - 1}
-          className="items-center flex justify-center h-10 w-10 hover:bg-gray-200 rounded-md disabled:opacity-50 borderLine"
+          <ChevronLeft />
+        </Button>
+        <Button
+          className="ml-auto"
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
         >
-          <NextIcon/>
-        </button>
-
-        <button
-          onClick={() => handlePageChange(totalPages - 1)}
-          disabled={currentPage === totalPages - 1}
-          className="h-10 w-10 items-center flex justify-center hover:bg-gray-200 rounded-md disabled:opacity-50 borderLine"
+          <ChevronRight />
+        </Button>
+        <Button
+          className="mr-auto"
+          variant="outline"
+          size="sm"
+          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+          disabled={!table.getCanNextPage()}
         >
-          <LastPageIcon/>
-        </button>
+          <ChevronsRight />
+        </Button>
       </div>
     </div>
   );
-}
+};
+
+export default Pagination;

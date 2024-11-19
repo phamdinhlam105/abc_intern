@@ -1,5 +1,6 @@
 
 export default function FilterIcon() {
+
     return (
         <svg className="h-6 w-6"
             width="12" height="12"
