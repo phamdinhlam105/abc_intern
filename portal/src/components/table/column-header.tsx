@@ -26,7 +26,7 @@ const ColumnHeader: React.FC<ColumnHeaderProps> = ({ column, title }) => {
   };
   const [sortStatus, setSortStatus] = useState(0);
   return (
-    <div className="flex justify-center w-28">
+    <div className="flex justify-center">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 hover:bg-gray-100 font-bold">

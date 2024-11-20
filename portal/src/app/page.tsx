@@ -1,18 +1,8 @@
-import Body from "./body/body";
-import { AppSideBar } from "@/components/side-bar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import Header from "./body/header";
+'use client'
+import ArticlePage from "./article/page";
 
 export default function Home() {
   return (
-    <div>
-      <SidebarProvider>
-        <AppSideBar />
-        <SidebarInset>
-          <Header title="Bài viết" />
-          <Body />
-        </SidebarInset>
-      </SidebarProvider>
-    </div>
+    <ArticlePage/>
   )
 }

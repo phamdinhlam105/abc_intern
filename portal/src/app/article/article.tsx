@@ -1,7 +1,7 @@
 "use client"
-import { ARTICLE_LIST } from "@/components/article/constant/article.constants";
-import { DataTable } from "./article-table/data-table";
-import { getArticleColumns } from "./article-table/columns";
+import { ARTICLE_LIST } from "@/components/article/constants/article.constants";
+import { DataTable } from "@/components/table/data-table";
+import { getArticleColumns } from "@/components/article/column-def/columns";
 import { useState } from "react";
 
 

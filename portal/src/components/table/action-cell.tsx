@@ -6,7 +6,7 @@ import { MoreHorizontal } from "lucide-react";
 const ActionCell = ({ idRow, onDelete }: { idRow: string,onDelete: (idRow:string) => void }) => {
 
     return (
-        <div className="flex justify-center w-28">
+        <div className="flex justify-center w-23">
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="h-8 w-8 bg-gray-100">

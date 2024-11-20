@@ -1,15 +1,12 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
-import { Table } from "@tanstack/react-table";
+import { PaginationState, Table } from "@tanstack/react-table";
 
 interface PaginationProps {
   table: Table<any>;
-  pagination: {
-    pageIndex: number;
-    pageSize: number;
-  };
-  setPagination: React.Dispatch<React.SetStateAction<{ pageIndex: number; pageSize: number }>>;
+  pagination: PaginationState;
+  setPagination: React.Dispatch<React.SetStateAction<PaginationState>>;
 }
 
 const Pagination: React.FC<PaginationProps> = ({ table, pagination, setPagination }) => {

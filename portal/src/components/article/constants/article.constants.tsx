@@ -1,4 +1,4 @@
-import { Article } from "@/app/body/article-page/article-table/columns";
+import { Article } from "../model/article-model";
 
 export const ARTICLE_LIST: Article[] = [
     {

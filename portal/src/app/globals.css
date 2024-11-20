@@ -11,6 +11,29 @@ body {
   border-color: #D1D5DB;
 }
 
+@keyframes moveBackground {
+  0% {
+    background-position: 0 0;
+  }
+  25% {
+    background-position: 10% 0;
+  }
+  50% {
+    background-position: 100% 0;
+  }
+  75% {
+    background-position: 90% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+.bg-animation {
+  animation: moveBackground 8s ease-out infinite;
+}
+
+
 @layer base {
   :root {
     --background: 0 0% 100%;
