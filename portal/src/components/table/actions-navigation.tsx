@@ -37,7 +37,7 @@ export default function ActionsNavigation({ table, onDelete }: { table: Table<an
         table.getColumn("status")?.setFilterValue(undefined);
     }
     return (
-        <div className="inline-flex items-center mb-2 w-full justify-start text-neutral-50 gap-x-2 mb-3">
+        <div className="inline-flex items-center w-full justify-start text-neutral-50 gap-x-2 mb-3">
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button className="h-10 w-10">
@@ -142,7 +142,7 @@ export default function ActionsNavigation({ table, onDelete }: { table: Table<an
                         })}
                 </DropdownMenuContent>
             </DropdownMenu>
-            <button className="h-10 ml-auto rounded-md bg-primary text-white hover:opacity-90 duration-100 px-5 py-items-center justify-center borderLine font-semibold text-sm">
+            <button className="h-10 ml-auto rounded-md bg-primary text-white hover:opacity-90 duration-100 px-5 items-center justify-center borderLine font-semibold text-sm">
                 Thêm mới
             </button>
             <DropdownMenu>

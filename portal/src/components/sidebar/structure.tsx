@@ -3,7 +3,7 @@ import { BookOpenText, ListTree, Folders, Settings } from "lucide-react";
 export const SidebarStructure = [
     {
         title: "Bài viết",
-        url: "/",
+        url: "/article",
         icon: BookOpenText,
         items: [
             {
@@ -25,21 +25,21 @@ export const SidebarStructure = [
     },
     {
         title: "Quản lý tệp",
-        url: "#",
+        url: "/file",
         icon: Folders
     },
     {
         title: "Cài đặt",
-        url: "#",
+        url: "/settings",
         icon: Settings,
         items: [
             {
                 title: "Tài khoản",
-                url: "#",
+                url: "/settings/account",
             },
             {
                 title: "Giao diện",
-                url: "#",
+                url: "/settings/appearance",
             },
         ],
     },

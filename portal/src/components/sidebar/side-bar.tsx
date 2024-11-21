@@ -22,11 +22,10 @@ import { SidebarStructure } from "./structure";
 import { usePathname } from "next/navigation";
 
 
-
 export function AppSideBar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const path = usePathname();
     return (
-        <Sidebar {...props} className="z-30"
+        <Sidebar {...props} className="z-30 bg-white"
         >
             <SidebarHeader>
                 <Logo />
@@ -42,9 +41,12 @@ export function AppSideBar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                         <SidebarGroup>
                             <SidebarGroupLabel
                                 asChild
-                                className="h-10 group/label text-md text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                                className="h-10 group/label text-md text-sidebar-foreground "
                             >
-                                <div className={`items-center flex rounded-md ${(path === item.url) ? 'bg-primary text-white' : ''}`}>
+                                <div className={`items-center flex rounded-md transition-colors duration-50 
+                                    ${path.includes(item.url) || (path === '/' && item.url === '/article') ?
+                                        'bg-primary text-white' :
+                                        'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'}`}>
                                     <Link className="flex px-4" href={item.url}>
                                         {<item.icon className="mr-2 w-6 h-6" />}
                                         {item.title}{" "}
