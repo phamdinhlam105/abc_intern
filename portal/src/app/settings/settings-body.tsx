@@ -14,25 +14,25 @@ export default function Settings({ defaultTab }: { defaultTab: string }) {
         route.replace('/settings/' + value);
     }
     return (
-        <div className="p-4">
-            <div className="rounded-md border p-4 shadow-sm h-fit">
+        <div className="p-4 dark:bg-black h-full">
+            <div className="rounded-md border p-4 shadow-sm h-full bg-background">
                 <div>
                     <h3 className="font-semibold text-lg">Cài đặt</h3>
                     <p className="text-gray-400">Quản lý cài đặt tài khoản của bạn</p>
                 </div>
                 <Separator className="my-4" />
-                <Tabs className="flex bg-white pt-4"
+                <Tabs className="flex pt-4 bg-background"
                     defaultValue={defaultTab}
                     onValueChange={(value) => handleValueChange(value)}>
-                    <TabsList className="flex-col space-y-1 bg-white w-1/4 pr-6 h-10">
+                    <TabsList className="flex-col space-y-1 bg-background w-1/4 pr-6 h-10">
                         <TabsTrigger
                             value="account"
-                            className="h-10 font-semibold justify-start w-full data-[state=active]:bg-gray-100 data-[state=active]:border-none rounded-md" >
+                            className="h-10 font-semibold rounded-md justify-start w-full data-[state=active]:border-none data-[state=active]:bg-accent" >
                             Tài khoản
                         </TabsTrigger>
                         <TabsTrigger
                             value="appearance"
-                            className="h-10 font-semibold justify-start w-full data-[state=active]:bg-gray-100 data-[state=active]:border-none rounded-md">
+                            className="h-10 rounded-md font-semibold justify-start w-full data-[state=active]:border-none data-[state=active]:bg-accent">
                             Giao diện
                         </TabsTrigger>
                     </TabsList>

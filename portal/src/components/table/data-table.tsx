@@ -69,7 +69,7 @@ export function DataTable<TData extends { id: string }, TValue>({
   });
   
   return (
-    <div className="rounded-md border w-full p-4 shadow-md">
+    <div className="rounded-md border w-full p-4 shadow-md bg-background">
       <ActionsNavigation table={table} onDelete={onDelete}/>
       <Table className="text-md border rounded-md">
         <TableHeader>

@@ -7,7 +7,7 @@ export default function AccountSetting() {
     return (
         <div>
             <h3 className="font-semibold text-lg">Tài khoản</h3>
-            <p className="text-gray-400 text-sm">Cài đặt tài khoản của bạn.</p>
+            <p className="text-secondary-foreground text-sm">Cài đặt tài khoản của bạn.</p>
             <Separator className="my-4" />
             <LanguageSelect />
         </div>

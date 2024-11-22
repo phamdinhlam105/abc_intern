@@ -2,10 +2,11 @@ import { Separator } from "@/components/ui/separator";
 import ThemeSkeleton from "./theme-skeleton";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useTheme } from "next-themes";
 
 export default function AppearanceSetting() {
-    const [theme, setTheme] = useState('light');
-    const [chooseItem, setChooseItem] = useState(0);
+    const { theme, setTheme } = useTheme();
+    const [chooseItem, setChooseItem] = useState(theme === 'light' ? 0 : 1);
 
     const lightThemeClick = () => {
         setChooseItem(0);
@@ -18,7 +19,6 @@ export default function AppearanceSetting() {
     const saveTheme = () => {
         setTheme(chooseItem === 0 ? 'light' : 'dark');
 
-        console.log(theme)
     }
 
     return (

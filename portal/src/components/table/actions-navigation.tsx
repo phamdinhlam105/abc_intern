@@ -6,7 +6,7 @@ import { Input } from "../ui/input";
 import React from "react";
 
 
-export default function ActionsNavigation({ table, onDelete }: { table: Table<any>, onDelete:(idRow:string)=>void }) {
+export default function ActionsNavigation({ table, onDelete }: { table: Table<any>, onDelete: (idRow: string) => void }) {
 
     const [search, setSearch] = React.useState('');
     const allStatus = ['published', 'deleted', 'draft'];
@@ -41,7 +41,7 @@ export default function ActionsNavigation({ table, onDelete }: { table: Table<an
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button className="h-10 w-10">
-                        <ListFilter className="w-full h-full" />
+                        <ListFilter className="w-full h-full dark:text-black" />
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
@@ -57,14 +57,14 @@ export default function ActionsNavigation({ table, onDelete }: { table: Table<an
                             <span>Trạng thái</span>
                         </DropdownMenuSubTrigger>
                         <DropdownMenuSubContent
-                            className="bg-white shadow-md rounded-md p-1">
+                            className="bg-background shadow-md rounded-md p-1">
                             <DropdownMenuLabel asChild>
-                                <div className="flex items-center p-2 ">
+                                <div className="flex items-center p-2">
                                     <Search />
                                     <Input
                                         value={statusSearch}
                                         onChange={(e) => setStatusSearch(e.target.value)}
-                                        className="max-w-sm border-none px-4 "
+                                        className="max-w-sm ml-2 border-none px-4"
                                     />
                                 </div>
                             </DropdownMenuLabel>
@@ -80,40 +80,47 @@ export default function ActionsNavigation({ table, onDelete }: { table: Table<an
                                     </DropdownMenuCheckboxItem>
                             }
                             )}
-                            <DropdownMenuSeparator />
+
                             {(selectedStatuses.length > 0) ?
-                                <DropdownMenuItem className="p-2 flex justify-center" onClick={removeFilter}>
-                                    Xóa bộ lọc
-                                </DropdownMenuItem>
+                                <>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem className="p-2 flex justify-center" onClick={removeFilter}>
+                                        Xóa bộ lọc
+                                    </DropdownMenuItem>
+                                </>
+
                                 : ''}
                         </DropdownMenuSubContent>
                     </DropdownMenuSub>
                 </DropdownMenuContent>
             </DropdownMenu>
 
-            <div className="w-30 relative ">
+            <div className="w-30 relative">
                 <Input
                     placeholder="Từ khóa..."
                     value={search}
                     onChange={(event) => setSearch(event.target.value)
                     }
-                    className="max-w-sm text-black"
+                    className="max-w-sm"
                 />
-                <button className="h-8 w-8 absolute text-black right-1 top-1 hover:bg-gray-100 items-center flex justify-center rounded-l-sm rounded-r-md"
+                <Button 
+                variant="outline"
+                className="border-none h-8 w-8 absolute right-1 top-1 items-center flex justify-center rounded-l-sm rounded-r-md"
                     onClick={handleSearchClick}>
                     <Search />
-                </button>
+                </Button>
             </div>
-            <button
-                className="text-black border h-10 px-3 rounded-md hover:bg-gray-100"
+            <Button
+                className="text-foreground border h-10 px-3 rounded-md "
+                variant="outline"
                 onClick={removeSearchFilter}>
                 Xóa bộ lọc
-            </button>
+            </Button>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <button className="hover:bg-gray-100 borderLine text-black w-10 h-10 items-center flex justify-center rounded-md hover:opacity-90">
+                    <Button variant="outline" className="borderLine w-10 h-10 items-center flex justify-center rounded-md">
                         <Columns2 />
-                    </button>
+                    </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
                     <DropdownMenuLabel className="px-2 items-center py-2">
@@ -142,17 +149,17 @@ export default function ActionsNavigation({ table, onDelete }: { table: Table<an
                         })}
                 </DropdownMenuContent>
             </DropdownMenu>
-            <button className="h-10 ml-auto rounded-md bg-primary text-white hover:opacity-90 duration-100 px-5 items-center justify-center borderLine font-semibold text-sm">
+            <button className="h-10 ml-auto rounded-md bg-primary dark:text-black hover:opacity-90 duration-100 px-5 items-center justify-center borderLine font-semibold text-sm">
                 Thêm mới
             </button>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-10 text-md bg-primary hover:opacity-90 hover:bg-primary hover:text-white">
+                    <Button variant="ghost" className="h-10 dark:text-black text-md bg-primary hover:opacity-90 hover:bg-primary hover:text-white">
                         Thao tác hàng loạt
                         <ChevronDown />
                     </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="bg-white shadow w-60 h-10 p-1 rounded-md">
+                <DropdownMenuContent align="end" className="bg-white dark:bg-neutral-900 shadow w-60 h-10 p-1 rounded-md">
                     <DropdownMenuItem
                         onClick={() => {
                             const selectedRows = table.getSelectedRowModel().rows;
@@ -161,7 +168,7 @@ export default function ActionsNavigation({ table, onDelete }: { table: Table<an
                             });
                         }}
                         disabled={!table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()}
-                        className="px-2 w-full items-center hover:bg-gray-200 rounded-sm text-black"
+                        className="px-2 w-full items-center hover:bg-gray-200 rounded-sm text-black dark:text-white "
                     >
                         <p>Xóa các dòng đã chọn</p>
                     </DropdownMenuItem>

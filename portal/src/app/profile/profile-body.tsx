@@ -3,10 +3,11 @@ import { PROFILE } from "@/components/profile/constants/profile.constants";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
+import { Button } from "@/components/ui/button";
 
 export default function ProfileBody() {
 
-    return <div className="p-4">
+    return <div className="p-4 dark:bg-black h-full">
         <div className=" rounded-t-md flex items-end h-60 bg-animation shadow-md border"
             style={
                 {
@@ -15,7 +16,7 @@ export default function ProfileBody() {
                     backgroundRepeat: 'no-repeat',
                 }
             }>
-            <div className="bg-white h-28 w-full divide-y">
+            <div className="bg-background h-28 w-full divide-y">
                 <div className="flex space-x-2 items-center justify-between px-4 h-full">
                     <div className="relative h-full flex flex-col justify-center">
                         <div className="absolute -top-1/2 scale-3">
@@ -34,19 +35,19 @@ export default function ProfileBody() {
                         <p className="text-md ml-40">{PROFILE.mail}</p>
                     </div>
                     <div>
-                        <button className="h-10 ml-auto bg-primary text-white p-2 px-4 rounded-md text-sm font-semibold">
+                        <Button className="h-10 ml-auto text-white p-2 px-4 rounded-md text-sm font-semibold">
                             Sửa thông tin cá nhân
-                        </button>
+                        </Button>
                     </div>
                 </div>
                 <Tabs defaultValue="overview">
-                    <TabsList className=" h-12 border-l border-r border-b shadow-sm rounded-b-md bg-white w-full space-x-1 justify-start px-2 py-0 z-10">
+                    <TabsList className=" h-12 border-l border-r border-b shadow-sm rounded-b-md bg-background w-full space-x-1 justify-start px-2 py-0 z-10">
                         <TabsTrigger value="overview" >Tổng quan</TabsTrigger>
                         <TabsTrigger value="posts" >Bài viết</TabsTrigger>
                         <TabsTrigger value="actions" >Hoạt động</TabsTrigger>
                     </TabsList>
                     <TabsContent value="overview" className="flex grid-rows-1 space-x-2">
-                        <div className="border rounded-md w-7/12 shadow-md">
+                        <div className="border rounded-md w-7/12 shadow-md bg-background">
                             <h3 className="font-bold my-2 mx-4">Thông tin của tôi</h3>
                             <Separator />
                             <div className="py-4 px-4">
@@ -67,9 +68,12 @@ export default function ProfileBody() {
                                 </div>
                             </div>
                         </div>
-                        <div className="border rounded-md w-5/12 shadow-md">
+                        <div className="border rounded-md w-5/12 shadow-md bg-background h-fit">
                             <h3 className="font-bold my-2 mx-4">Photos</h3>
                             <Separator />
+                            <div className="py-4">
+                                
+                            </div>
                         </div>
                     </TabsContent>
                     <TabsContent value="posts">

@@ -33,7 +33,7 @@ export const getArticleColumns = ({ onDelete }: { onDelete: (idRow: string) => v
         accessorKey: "status",
         header: ({ column }) => <ColumnHeader column={column} title="Trạng thái" />,
         cell: ({ row }) => <div className="w-23 font-medium mx-auto flex justify-center">
-            <p className={`px-2 bg-gray-100 rounded-md 
+            <p className={`px-2 bg-gray-100 rounded-md dark:bg-slate-900
             ${row.getValue("status") === "published" ?
                     'text-green-600' :
                     row.getValue("status") === "deleted" ?

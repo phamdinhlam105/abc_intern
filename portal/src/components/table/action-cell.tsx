@@ -9,7 +9,7 @@ const ActionCell = ({ idRow, onDelete }: { idRow: string,onDelete: (idRow:string
         <div className="flex justify-center w-23">
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-8 w-8 bg-gray-100">
+                    <Button variant="outline" className="h-8 w-8">
                         <MoreHorizontal className="h-4 w-4" />
                     </Button>
                 </DropdownMenuTrigger>

@@ -24,12 +24,12 @@ export default function LanguageSelect() {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 bg-space-y-6">
                 <FormField
                     control={form.control}
                     name="language"
                     render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="w-44">
                             <FormLabel className="font-semibold">Ngôn ngữ</FormLabel>
                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                                 <FormControl>
@@ -46,7 +46,8 @@ export default function LanguageSelect() {
                         </FormItem>
                     )}
                 />
-                <Button type="submit">Cập nhật</Button>
+                <p className="my-3 text-secondary-foreground text-sm">Chọn ngôn ngữ bạn muốn sử dụng.</p>
+                <Button variant="default" type="submit">Cập nhật</Button>
             </form>
         </Form>
     )
