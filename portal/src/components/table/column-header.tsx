@@ -29,7 +29,7 @@ const ColumnHeader: React.FC<ColumnHeaderProps> = ({ column, title }) => {
     <div className="flex justify-center">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 hover:bg-gray-100 font-bold">
+          <Button variant="ghost" className="h-8 font-bold">
             {title}
             {sortStatus === 0 ? <ChevronsUpDown /> : sortStatus === 1 ?
               <MoveUp className="h-3 w-3 mr-2 text-secondary" /> :

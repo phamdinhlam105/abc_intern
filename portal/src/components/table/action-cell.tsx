@@ -13,10 +13,10 @@ const ActionCell = ({ idRow, onDelete }: { idRow: string,onDelete: (idRow:string
                         <MoreHorizontal className="h-4 w-4" />
                     </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="bg-white shadow w-32 h-8 items-center py-1 px-1 rounded-md">
+                <DropdownMenuContent align="end" className="bg-background shadow w-32 h-8 items-center py-1 px-1 rounded-md">
                     <DropdownMenuItem
                         onClick={() => onDelete(idRow)}
-                        className="px-2 items-center hover:bg-gray-200 hover:outline-none rounded-sm"
+                        className="py-1 px-2 items-center bg-background border hover:bg-gray-200 dark:hover:bg-slate-900 hover:outline-none rounded-sm"
                     >
                         Xóa
                     </DropdownMenuItem>

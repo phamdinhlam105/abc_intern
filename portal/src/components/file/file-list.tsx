@@ -1,0 +1,40 @@
+
+import ImageFile from './image-file';
+import WordFile from './word-file';
+import PresentationFile from './presentation-file';
+import { IFileProps } from './model/file-model';
+import { useState } from 'react';
+
+export default function FileList({ files, selectedFiles }: { files: IFileProps[], selectedFiles: IFileProps[] }) {
+
+    const [selected, setSelected] = useState<IFileProps[]>([])
+
+    const handleCheckChange = (file: IFileProps, isCheck: boolean) => {
+        console.log(selected)
+        if (isCheck)
+            setSelected((prev) => [...prev, file]);
+        else
+            setSelected(selected.filter(s => s != file));
+    }
+
+    return (
+        <ul className="list grid grid-cols-8 p-4 gap-4">
+            {files.map((file, idx) => {
+                const fileExtension = file.fileName.split('.').pop();
+                switch (fileExtension) {
+                    case 'jpg':
+                    case 'jpeg':
+                    case 'png':
+                        return <li key={idx} ><ImageFile file={file} handleCheckChange={handleCheckChange} /></li>;
+                    case 'pdf':
+                        return <li key={idx}><PresentationFile file={file} handleCheckChange={handleCheckChange} /></li>
+                    case 'doc':
+                    case 'docx':
+                        return <li key={idx}><WordFile file={file} handleCheckChange={handleCheckChange} /></li>
+                    default:
+                        return undefined;
+                }
+            })}
+        </ul>
+    );
+}

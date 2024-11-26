@@ -18,13 +18,13 @@ export const getCategoryColumns = ({ onDelete }: { onDelete: (idRow: string) => 
     }, {
         accessorKey: "position",
         header: ({ column }) => <ColumnHeader column={column} title="Vị trí" />,
-        cell: ({ row }) => <div className="text-sm flex space-x-2 justify-center ">
+        cell: ({ row }) => <div className="text-sm flex space-x-2 justify-center items-center ">
             {row.getValue("position") === "LEFT" ?
                 <AlignStartVertical /> :
                 row.getValue("position") === "RIGHT" ?
                     <AlignEndVertical /> :
                     <AlignCenterVertical />}
-            <p className="px-2 bg-gray-100 rounded-lg font-semibold dark:bg-slate-900">{row.getValue("position")}</p>
+            <p className="px-2 bg-gray-100 rounded-lg font-semibold dark:bg-gray-800">{row.getValue("position")}</p>
         </div>
     },
     {

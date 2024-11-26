@@ -36,12 +36,10 @@ body {
   width: 8px;
 }
 
-/* Track */
 ::-webkit-scrollbar-track {
   border-radius: 10px;
 }
  
-/* Handle */
 ::-webkit-scrollbar-thumb {
   background: rgb(22, 163, 74); 
   border-radius: 10px;

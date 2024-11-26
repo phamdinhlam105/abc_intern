@@ -3,6 +3,7 @@ import ThemeSkeleton from "./theme-skeleton";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useTheme } from "next-themes";
+import { toast } from "@/hooks/use-toast";
 
 export default function AppearanceSetting() {
     const { theme, setTheme } = useTheme();
@@ -18,7 +19,10 @@ export default function AppearanceSetting() {
 
     const saveTheme = () => {
         setTheme(chooseItem === 0 ? 'light' : 'dark');
-
+        toast({
+            title: "THEME APPEARANCE",
+            description: "Save theme change"
+        })
     }
 
     return (
