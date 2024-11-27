@@ -1,10 +1,11 @@
 
-import { useRef } from "react";
+import React, { useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { redirect } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
 
-export const FileUploader: React.FC = () => {
+export function FileUploader({ setFileChanged }: {
+    setFileChanged: React.Dispatch<React.SetStateAction<boolean>>
+}) {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     const handleAddFileClick = () => {
@@ -23,16 +24,20 @@ export const FileUploader: React.FC = () => {
                 body: formData
             });
             const result = await response.json();
-            if (result.status == 'success')
+
+            if (result.status == 'success') {
                 toast({
                     title: "UPLOAD FILE",
                     description: "File upload successfully"
-                })
+                });
+                setFileChanged(true);
+            }
+
             else
                 toast({
                     title: "UPLOAD FILE",
                     description: "File upload failed"
-                })
+                });
         }
     };
 

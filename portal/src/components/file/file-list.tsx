@@ -3,18 +3,20 @@ import ImageFile from './image-file';
 import WordFile from './word-file';
 import PresentationFile from './presentation-file';
 import { IFileProps } from './model/file-model';
-import { useState } from 'react';
 
-export default function FileList({ files, selectedFiles }: { files: IFileProps[], selectedFiles: IFileProps[] }) {
+export default function FileList({ files, selectedFiles, setSelectedFiles }: {
+    files: IFileProps[],
+    selectedFiles: IFileProps[],
+    setSelectedFiles: React.Dispatch<React.SetStateAction<IFileProps[]>>
+}) {
 
-    const [selected, setSelected] = useState<IFileProps[]>([])
 
     const handleCheckChange = (file: IFileProps, isCheck: boolean) => {
-        console.log(selected)
+        console.log(selectedFiles)
         if (isCheck)
-            setSelected((prev) => [...prev, file]);
+            setSelectedFiles((prev) => [...prev, file]);
         else
-            setSelected(selected.filter(s => s != file));
+            setSelectedFiles(selectedFiles.filter(s => s != file));
     }
 
     return (

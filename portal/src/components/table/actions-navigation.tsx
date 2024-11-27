@@ -6,10 +6,13 @@ import { Input } from "../ui/input";
 import React from "react";
 
 
-export default function ActionsNavigation({ table, onDelete }: { table: Table<any>, onDelete: (idRow: string) => void }) {
+export default function ActionsNavigation({ table, onDelete, allStatus }: {
+    table: Table<any>,
+    onDelete: (idRow: string) => void,
+    allStatus: string[]
+}) {
 
     const [search, setSearch] = React.useState('');
-    const allStatus = ['published', 'deleted', 'draft'];
     const [statusSearch, setStatusSearch] = React.useState('');
     const [selectedStatuses, setSelectedStatuses] = React.useState<string[]>([]);
     const handleSearchClick = () => {
@@ -103,9 +106,9 @@ export default function ActionsNavigation({ table, onDelete }: { table: Table<an
                     }
                     className="max-w-sm"
                 />
-                <Button 
-                variant="outline"
-                className="border-none h-8 w-8 absolute right-1 top-1 items-center flex justify-center rounded-l-sm rounded-r-md"
+                <Button
+                    variant="outline"
+                    className="border-none h-8 w-8 absolute right-1 top-1 items-center flex justify-center rounded-l-sm rounded-r-md"
                     onClick={handleSearchClick}>
                     <Search />
                 </Button>

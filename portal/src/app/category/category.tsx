@@ -5,7 +5,7 @@ import { CATEGORIES } from "@/components/category/constants/category-constans";
 import { DataTable } from "@/components/table/data-table";
 import { useState } from "react";
 
-export default function Category(){
+export default function Category() {
     const [data, setData] = useState(CATEGORIES);
     const onDelete = (id: string) => {
         console.log(id)
@@ -14,7 +14,11 @@ export default function Category(){
     const columns = getCategoryColumns({ onDelete });
     return (
         <div className="p-3 w-full dark:bg-black">
-            <DataTable columns={columns} data={data} onDelete={onDelete} />
+            <DataTable
+                columns={columns}
+                data={data}
+                onDelete={onDelete}
+                allStatus={['visibled','deleted']} />
         </div>
     )
 }

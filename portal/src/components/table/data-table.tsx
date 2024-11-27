@@ -29,13 +29,15 @@ import ActionsNavigation from "./actions-navigation"
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
-  onDelete: (idRow: string) => void
+  onDelete: (idRow: string) => void,
+  allStatus: string[]
 }
 
 export function DataTable<TData extends { id: string }, TValue>({
   columns,
   data,
-  onDelete
+  onDelete,
+  allStatus
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [pagination, setPagination] = React.useState<PaginationState>({
@@ -70,7 +72,7 @@ export function DataTable<TData extends { id: string }, TValue>({
   
   return (
     <div className="rounded-md border w-full p-4 shadow-md bg-background">
-      <ActionsNavigation table={table} onDelete={onDelete}/>
+      <ActionsNavigation table={table} onDelete={onDelete} allStatus={allStatus}/>
       <Table className="text-md border rounded-md">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

@@ -1,10 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { FileUploader } from "./file-uploader";
+import { IFileProps } from "./model/file-model";
 
-export default function FileButton({ handleSearch }: { handleSearch: (search: string) => void }) {
+export default function FileButton({ handleSearch, removeSelected, selectedFiles, setFileChanged }: {
+    handleSearch: (search: string) => void,
+    removeSelected: () => void,
+    selectedFiles: IFileProps[],
+    setFileChanged: React.Dispatch<React.SetStateAction<boolean>>
+}) {
 
     const [search, setSearch] = useState('');
 
@@ -16,6 +22,7 @@ export default function FileButton({ handleSearch }: { handleSearch: (search: st
         handleSearch('')
         setSearch('')
     }
+
 
     return <div className="flex justify-between ">
         <div className="flex space-x-2">
@@ -35,7 +42,8 @@ export default function FileButton({ handleSearch }: { handleSearch: (search: st
             <Button
                 variant="outline"
                 className=" border h-10 px-3 rounded-md "
-                onClick={removeSearchFilter}>
+                onClick={removeSearchFilter}
+                disabled={selectedFiles.length === 0}>
                 Xóa bộ lọc
             </Button>
         </div>
@@ -43,10 +51,10 @@ export default function FileButton({ handleSearch }: { handleSearch: (search: st
             <Button
                 variant="outline"
                 className=" border h-10 px-3 rounded-md"
-                onClick={removeSearchFilter}>
+                onClick={removeSelected}>
                 Xóa tài nguyên
             </Button>
-            <FileUploader />
+            <FileUploader setFileChanged = {setFileChanged}/>
         </div>
     </div>
 }

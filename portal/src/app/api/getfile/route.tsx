@@ -16,7 +16,7 @@ export async function GET() {
 
                     return {
                         fileName: file,
-                        filePath: `/uploads/${file}`,
+                        filePath: `public/uploads/${file}`,
                         size: stats.size,
                     };
                 })
