@@ -13,7 +13,7 @@ export default function Category() {
     }
     const columns = getCategoryColumns({ onDelete });
     return (
-        <div className="p-3 w-full dark:bg-black">
+        <div className="p-3 w-full dark:bg-black h-full">
             <DataTable
                 columns={columns}
                 data={data}

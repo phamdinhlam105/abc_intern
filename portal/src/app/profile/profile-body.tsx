@@ -8,12 +8,12 @@ import { Button } from "@/components/ui/button";
 export default function ProfileBody() {
 
     return <div className="p-4 dark:bg-black h-full">
-        <div className=" rounded-t-md flex items-end h-60 bg-animation shadow-md border"
+        <div className=" rounded-t-md flex items-end h-1/2 bg-animation shadow-md border bg-top"
             style={
                 {
-                    backgroundImage: 'url("https://stage.portal.thpt-thd.abcsoftwarecompany.com/assets/cover-bg-DKlXl6NX.jpg")',
-                    backgroundSize: 'cover',
-                    backgroundRepeat: 'no-repeat',
+                    backgroundImage: 'url("profile_bg.jpg")',
+                    backgroundSize: 'auto',
+                    backgroundRepeat: 'no-repeat'
                 }
             }>
             <div className="bg-background h-28 w-full divide-y">

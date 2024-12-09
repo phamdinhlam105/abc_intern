@@ -2,6 +2,7 @@
 import React, { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
+import { uploadFile } from "@/app/file/fetch-data/upload-file";
 
 export function FileUploader({ setFileChanged }: {
     setFileChanged: React.Dispatch<React.SetStateAction<boolean>>
@@ -16,15 +17,7 @@ export function FileUploader({ setFileChanged }: {
         event.preventDefault();
         const file = event.target.files?.[0];
         if (file) {
-            const formData = new FormData();
-            formData.append('file', file);
-
-            const response = await fetch('/api/upload', {
-                method: 'POST',
-                body: formData
-            });
-            const result = await response.json();
-
+            const result = await uploadFile(file);
             if (result.status == 'success') {
                 toast({
                     title: "UPLOAD FILE",

@@ -13,7 +13,7 @@ export default function Article() {
     }
     const columns = getArticleColumns({ onDelete });
     return (
-        <div className="p-3 w-full dark:bg-black">
+        <div className="p-3 w-full dark:bg-black h-full">
             <DataTable columns={columns}
                 data={data}
                 onDelete={onDelete}

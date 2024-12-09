@@ -24,7 +24,7 @@ export default function FileButton({ handleSearch, removeSelected, selectedFiles
     }
 
 
-    return <div className="flex justify-between ">
+    return <div className="flex justify-between">
         <div className="flex space-x-2">
             <div className="relative max-w-sm ">
                 <Input
@@ -43,7 +43,7 @@ export default function FileButton({ handleSearch, removeSelected, selectedFiles
                 variant="outline"
                 className=" border h-10 px-3 rounded-md "
                 onClick={removeSearchFilter}
-                disabled={selectedFiles.length === 0}>
+                disabled={search.length === 0}>
                 Xóa bộ lọc
             </Button>
         </div>
@@ -51,6 +51,7 @@ export default function FileButton({ handleSearch, removeSelected, selectedFiles
             <Button
                 variant="outline"
                 className=" border h-10 px-3 rounded-md"
+                disabled={selectedFiles.length === 0}
                 onClick={removeSelected}>
                 Xóa tài nguyên
             </Button>

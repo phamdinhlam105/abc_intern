@@ -48,13 +48,13 @@ export function AppSideBar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                                         'bg-primary text-white dark:text-black' :
                                         'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'}`}>
                                     <Link className="flex px-4" href={item.url}>
-                                        {<item.icon className="mr-2 w-6 h-6" />}
+                                        {<item.icon className="mr-2 w-6 h-6 " />}
                                         {item.title}{" "}
                                     </Link>
                                     {item.items ? <CollapsibleTrigger
-                                        data-state={path.includes(item.url + '/')? "open":"closed"}
+                                        data-state={path.includes(item.url + '/') ? "open" : "closed"}
                                         className="ml-auto">
-                                        <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:-rotate-180" />
+                                        <ChevronDown  className="ml-auto transition-transform group-data-[state=open]/collapsible:-rotate-180" />
                                     </CollapsibleTrigger> : ""}
                                 </div>
                             </SidebarGroupLabel>
@@ -64,7 +64,9 @@ export function AppSideBar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                                         {item.items ? item.items.map((item) => (
                                             <SidebarMenuItem key={item.title} >
                                                 <SidebarMenuButton asChild className="h-10 px-8">
-                                                    <a className={`${path.includes(item.url) ? 'text-primary hover:text-primary' : ''}`} href={item.url}>{item.title}</a>
+                                                    <Link
+                                                        className={`${path.includes(item.url) ? 'text-primary hover:text-primary' : ''}`}
+                                                        href={item.url}>{item.title}</Link>
                                                 </SidebarMenuButton>
                                             </SidebarMenuItem>
                                         )) : ""}

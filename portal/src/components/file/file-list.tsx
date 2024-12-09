@@ -12,7 +12,6 @@ export default function FileList({ files, selectedFiles, setSelectedFiles }: {
 
 
     const handleCheckChange = (file: IFileProps, isCheck: boolean) => {
-        console.log(selectedFiles)
         if (isCheck)
             setSelectedFiles((prev) => [...prev, file]);
         else

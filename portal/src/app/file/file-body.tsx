@@ -4,8 +4,9 @@ import FileButton from "@/components/file/file-button"
 import FileList from "@/components/file/file-list"
 import { IFileProps } from "@/components/file/model/file-model";
 import { useEffect, useState } from "react";
-import { getFiles } from "./get-files";
+import { getFiles } from "./fetch-data/get-files";
 import { toast } from "@/hooks/use-toast";
+import { deleteFile } from "./fetch-data/delete-files";
 
 export default function FileBody() {
     const [files, setFiles] = useState<IFileProps[]>([]);
@@ -30,21 +31,15 @@ export default function FileBody() {
 
     const removeSelected = async () => {
         if (selectedFiles.length > 0) {
-            const formData = new FormData();
-            formData.append('files', JSON.stringify(selectedFiles));
 
-            const response = await fetch('/api/deletefile', {
-                method: 'DELETE',
-                body: formData
-            });
-            const result = await response.json();
+            const result = await deleteFile(selectedFiles);
             if (result.status == 'success') {
                 toast({
                     title: "FILE DELETED",
                     description: "File upload successfully"
                 });
-
                 setFileChanged(true);
+                setSelectedFiles([])
             }
 
             else
@@ -56,18 +51,16 @@ export default function FileBody() {
     }
 
     return (
-        <div className="p-4 pt-8">
-            <div className="p-3 rounded-md shadow-sm h-fit border">
+        <div className="p-3 w-full dark:bg-black h-full">
+            <div className="p-3 bg-background rounded-md shadow-sm border">
                 <FileButton
                     handleSearch={handleSearch}
                     removeSelected={removeSelected}
                     selectedFiles={selectedFiles}
                     setFileChanged={setFileChanged} />
-                <div>
-                    <FileList files={files}
-                        selectedFiles={selectedFiles}
-                        setSelectedFiles={setSelectedFiles} />
-                </div>
+                <FileList files={files}
+                    selectedFiles={selectedFiles}
+                    setSelectedFiles={setSelectedFiles} />
             </div>
         </div>
     )

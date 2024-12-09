@@ -36,17 +36,17 @@ const ColumnHeader: React.FC<ColumnHeaderProps> = ({ column, title }) => {
               <MoveDown className="h-3 w-3 mr-2 text-secondary" />}
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-32 py-1 px-1 rounded-md bg-white shadow-md space-y-1 text-black">
+        <DropdownMenuContent className="w-32 py-1 px-1 rounded-md bg-background shadow-md space-y-1 text-foreground">
           <DropdownMenuItem
             onClick={handleSortAsc}
-            className="flex px-2 items-center hover:bg-gray-200 hover:outline-none rounded-sm font-normal"
+            className="flex px-2 items-center hover:bg-accent hover:outline-none rounded-sm font-normal"
           >
             <MoveUp className="h-3 w-3 mr-2 text-secondary" />
             Tăng dần
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={handleSortDesc}
-            className="flex px-2 items-center hover:bg-gray-200 hover:outline-none rounded-sm font-normal"
+            className="flex px-2 items-center hover:bg-accent hover:outline-none rounded-sm font-normal"
           >
             <MoveDown className="h-3 w-3 mr-2 text-secondary" />
             Giảm dần
@@ -54,7 +54,7 @@ const ColumnHeader: React.FC<ColumnHeaderProps> = ({ column, title }) => {
           <hr />
           <DropdownMenuItem
             onClick={()=>column.toggleVisibility(false)}
-            className="flex px-2 items-center hover:bg-gray-200 hover:outline-none rounded-sm font-normal"
+            className="flex px-2 items-center hover:bg-accent hover:outline-none rounded-sm font-normal"
           >
             <EyeOff className="h-3 w-3 mr-2 text-secondary" />
             Ẩn cột
