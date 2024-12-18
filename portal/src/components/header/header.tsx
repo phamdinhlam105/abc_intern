@@ -7,9 +7,21 @@ import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { LogOut, User } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toast } from "@/hooks/use-toast";
+import { signOut } from "next-auth/react";
 
 export default function Header({ title }: { title: string }) {
     const router = useRouter();
+
+    const handleLogout = async () => {
+        await signOut({ redirect: false });
+        toast({
+            title: "LOGOUT",
+            description: "Log out successfully"
+        });
+        router.push('/login');
+
+    };
     return (
         <div className="flex h-16 items-center justify-between w-full border-b sticky top-0 z-10 bg-background ">
             <SidebarTrigger className=" h-10 w-10" />
@@ -43,7 +55,9 @@ export default function Header({ title }: { title: string }) {
                             Thông tin cá nhân
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="flex p-2 hover:bg-accent hover:outline-none rounded-md">
+                        <DropdownMenuItem
+                            onClick={handleLogout}
+                            className="flex p-2 hover:bg-accent hover:outline-none rounded-md">
                             <LogOut />
                             Đăng xuất
                         </DropdownMenuItem>
