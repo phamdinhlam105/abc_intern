@@ -8,7 +8,7 @@ export const SidebarStructure = [
         items: [
             {
                 title: "Tạo bài viết mới",
-                url: "#",
+                url: "/article/new",
             }
         ],
     },

@@ -9,6 +9,7 @@ import { toast } from "@/hooks/use-toast";
 import { deleteFile } from "./fetch-data/delete-files";
 
 export default function FileBody() {
+    
     const [files, setFiles] = useState<IFileProps[]>([]);
     const [selectedFiles, setSelectedFiles] = useState<IFileProps[]>([]);
     const [fileChanged, setFileChanged] = useState(true);
