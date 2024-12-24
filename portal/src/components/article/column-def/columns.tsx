@@ -22,7 +22,7 @@ export const getArticleColumns = ({ onDelete }: { onDelete: (idRow: string) => v
     {
         accessorKey: "category",
         header: ({ column }) => <ColumnHeader column={column} title="Danh mục" />,
-        cell: ({ row }) => <div className="font-medium">{row.getValue("category")}</div>
+        cell: ({ row }) => <div className="font-medium">{(row.getValue("category") as Category).name}</div>
     },
     {
         accessorKey: "createDate",
@@ -42,11 +42,11 @@ export const getArticleColumns = ({ onDelete }: { onDelete: (idRow: string) => v
                 }`}>{row.getValue("status")}</p>
         </div>
     },
-    {
-        accessorKey: "author",
-        header: ({ column }) => <ColumnHeader column={column} title="Tác giả" />,
-        cell: ({ row }) => <div className="w-28 font-medium">{row.getValue("author")}</div>
-    },
+    // {
+    //     accessorKey: "author",
+    //     header: ({ column }) => <ColumnHeader column={column} title="Tác giả" />,
+    //     cell: ({ row }) => <div className="w-28 font-medium">{row.getValue("author")}</div>
+    // },
     {
         id: "actions",
         header: () => <div className="flex justify-center w-24 text-sm">Hành động</div>,

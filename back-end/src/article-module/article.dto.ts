@@ -13,8 +13,12 @@ export class CreateArticleDto {
 
     @IsString()
     @IsNotEmpty()
+    author: string;
+
+    @IsString()
+    @IsNotEmpty()
     content: string;
-    
+
     @IsString()
     @IsNotEmpty()
     describe: string;
@@ -22,7 +26,10 @@ export class CreateArticleDto {
     @IsString()
     @IsNotEmpty()
     thumbnail: string;
-    
+
+    @IsString()
+    @IsNotEmpty()
+    status: 'published' | 'draft' | 'deleted';
 }
 
-export class UpdateArticlDto extends PartialType(CreateArticleDto){}
+export class UpdateArticlDto extends PartialType(CreateArticleDto) { }

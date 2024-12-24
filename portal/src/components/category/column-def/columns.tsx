@@ -37,7 +37,7 @@ export const getCategoryColumns = ({ onDelete }: { onDelete: (idRow: string) => 
         header: ({ column }) => <ColumnHeader column={column} title="Trạng thái" />,
         cell: ({ row }) => <div className="w-23 font-medium mx-auto flex justify-center">
             <p className={`px-2 bg-gray-100 rounded-md dark:bg-slate-900
-        ${row.getValue("status") === "visibled" ?
+        ${row.getValue("status") === "visible" ?
                     'text-green-600' :
                     'text-red-600'
                 }`}>{row.getValue("status")}</p>

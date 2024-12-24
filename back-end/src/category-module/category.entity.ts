@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ArticleEntity } from "../article-module/article.entity";
 
 @Entity('category')
@@ -11,6 +11,15 @@ export class CategoryEntity {
 
     @Column({ type: 'varchar', length: 225, nullable: false })
     slug: string;
+
+    @CreateDateColumn({ type: 'timestamp without time zone', default: () => 'CURRENT_TIMESTAMP' })
+    createDate: Date;
+
+    @Column({ type: 'varchar', length: 225, nullable: false })
+    status: "visible" | "deleted";
+
+    @Column({ type: 'varchar', length: 225, nullable: false })
+    position: "LEFT" | "MAIN" | "RIGHT";
 
     @ManyToOne(() => CategoryEntity, (category) => category.subCategories)
     parentCategory: CategoryEntity;

@@ -4,50 +4,46 @@ import FileButton from "@/components/file/file-button"
 import FileList from "@/components/file/file-list"
 import { IFileProps } from "@/components/file/model/file-model";
 import { useEffect, useState } from "react";
-import { getFiles } from "./fetch-data/get-files";
 import { toast } from "@/hooks/use-toast";
-import { deleteFile } from "./fetch-data/delete-files";
+import { deleteImage, getImages } from "./api";
 
 export default function FileBody() {
-    
+
     const [files, setFiles] = useState<IFileProps[]>([]);
     const [selectedFiles, setSelectedFiles] = useState<IFileProps[]>([]);
     const [fileChanged, setFileChanged] = useState(true);
-    const fetchFiles = async () => {
-        const data = await getFiles();
-        setFiles(data.files);
-    }
+
     useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const result = await getImages();
+                setFiles(result);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
         if (fileChanged === true) {
-            fetchFiles();
+            fetchData();
             setFileChanged(false);
         }
     }, [fileChanged]);
     const handleSearch = (search: string) => {
         if (search)
-            setFiles(files.filter(file => file.fileName.toLowerCase().includes(search.toLowerCase())));
+            setFiles(files.filter(file => file.name.toLowerCase().includes(search.toLowerCase())));
         else
-            fetchFiles();
+            setFileChanged(true);
     }
 
     const removeSelected = async () => {
         if (selectedFiles.length > 0) {
-
-            const result = await deleteFile(selectedFiles);
-            if (result.status == 'success') {
-                toast({
-                    title: "FILE DELETED",
-                    description: "File upload successfully"
-                });
-                setFileChanged(true);
-                setSelectedFiles([])
-            }
-
-            else
-                toast({
-                    title: "FILE DELETD FAILED",
-                    description: "File upload failed. " + result.message
-                });
+            setFiles((prevData) =>
+                prevData.filter((item) => !selectedFiles.includes(item))
+            );
+            selectedFiles.map(f => deleteImage(f.id));
+            toast({
+                title: "DELETE CATEGORY",
+                description: "All selected images are deleted"
+            })
         }
     }
 

@@ -7,6 +7,9 @@ export class ImageEntity {
     id: string;
 
     @Column({ type: 'varchar', length: 225, nullable: false })
+    name: string
+
+    @Column({ type: 'varchar', length: 225, nullable: false })
     describe: string
 
     @Column({ type: 'text', nullable: false })

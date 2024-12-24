@@ -76,6 +76,15 @@ export class ImageService {
         return convertEntityToImage(updatedImageEntity);
     }
 
+
+    async getImageWithoutArticle() {
+        const images = await this.imageRepository.find({
+            where: { isActive: true, article: null },
+            relations: { article: true }
+        });
+        return images.map(convertEntityToImage);
+    }
+
     async deleteImage(id: string) {
         this.checkIdIsValid(id);
         const deleteImage = await this.imageRepository.findOne({

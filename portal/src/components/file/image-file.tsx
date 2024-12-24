@@ -9,7 +9,7 @@ export default function ImageFile({ file, handleCheckChange }: {
     return <div className='rounded-lg shadow-sm h-32 flex items-end border border-2 relative'
         style={
             {
-                backgroundImage: `url(${file.filePath})`,
+                backgroundImage: `url(${file.url})`,
                 backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center'
@@ -28,8 +28,7 @@ export default function ImageFile({ file, handleCheckChange }: {
 
         </Checkbox>
         <div className='bg-accent h-1/3 w-full rounded-b-md px-2'>
-            <p className='truncate text-sm'>{file.fileName}</p>
-            <p className='truncate text-sm text-secondary'>{(file.size / 1024).toFixed(2)} KB</p>
+            <p className='truncate text-sm'>{file.name}</p>
         </div>
     </div>
 }

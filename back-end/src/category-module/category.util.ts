@@ -7,7 +7,10 @@ export default function convertEntityToCategory(entity: CategoryEntity): ICatego
             id: entity.id,
             name: entity.name,
             slug: entity.slug,
-            parentCategory: entity.parentCategory? convertEntityToCategory(entity.parentCategory): null,
+            position: entity.position,
+            status: entity.status,
+            createDate: entity.createDate.toLocaleDateString("en-GB"),
+            parentCategory: entity.parentCategory ? convertEntityToCategory(entity.parentCategory) : null,
         });
     return null;
 }

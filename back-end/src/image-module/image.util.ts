@@ -6,6 +6,7 @@ export default function convertEntityToImage(imageEntity: ImageEntity): IImage {
    if (imageEntity)
       return ({
          id: imageEntity.id,
+         name:imageEntity.name,
          article: convertEntityToArticle(imageEntity.article),
          describe: imageEntity.describe,
          createDate: imageEntity.createDate.toLocaleDateString("en-GB"),

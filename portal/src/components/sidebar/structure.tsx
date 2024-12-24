@@ -19,7 +19,7 @@ export const SidebarStructure = [
         items: [
             {
                 title: "Tạo danh mục mới",
-                url: "#",
+                url: "/category/new",
             }
         ],
     },

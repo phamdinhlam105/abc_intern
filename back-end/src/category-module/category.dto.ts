@@ -11,6 +11,14 @@ export class CreateCategoryDto {
     @IsNotEmpty()
     slug: string;
 
+    @IsString()
+    @IsNotEmpty()
+    position: "LEFT" | "MAIN" | "RIGHT";
+
+    @IsString()
+    @IsNotEmpty()
+    status: 'visible' | 'deleted';
+
     @IsUUID()
     @IsString()
     @IsOptional()

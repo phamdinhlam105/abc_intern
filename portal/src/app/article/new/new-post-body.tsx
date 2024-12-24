@@ -9,27 +9,26 @@ import { useState } from "react";
 export default function NewPostBody() {
 
     const [newPost, setNewPost] = useState<Article>({
-        id: (ARTICLE_LIST.length + 1).toString(),
+        id: '',
         title: '',
-        category: '',
+        content:'',
+        thumbnail:'',
+        describe:'',
         author: '',
-        createDate: new Date().toLocaleString('en-GB'),
-        status: 'draft'
+        createDate: '',
+        status: 'draft',
+        category: undefined
     })
-    const [title, setTitle] = useState('');
-    const [category, setCategory] = useState('');
-    const [author, setAuthor] = useState('');
-    const [status, setStatus] = useState('draft');
     const handleClick = () => {
-
+        console.log(newPost)
     }
 
     return <div className="p-4 w-full dark:bg-black h-full space-y-4">
         <div className="flex space-x-6">
-            <NewPostContent />
-            <NewPostInformation />
+            <NewPostContent setNewPost={setNewPost}/>
+            <NewPostInformation setPost={setNewPost} />
         </div>
-        <Button>
+        <Button onClick={handleClick}>
             Tạo bài viết
         </Button>
     </div>

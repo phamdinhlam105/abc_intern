@@ -8,7 +8,7 @@ export class ImageController {
     constructor(private imageService: ImageService) { }
 
     @Post()
-    @UsePipes(new ValidationPipe({whitelist:true}))
+    @UsePipes(new ValidationPipe({ whitelist: true }))
     async createImage(@Body() req: CreateImageDto): Promise<Image> {
         return await this.imageService.createImage(req);
     }
@@ -23,8 +23,13 @@ export class ImageController {
         return await this.imageService.getImageById(id);
     }
 
+    @Get('non-article')
+    async getImageWithoutArticle(): Promise<Image[]> {
+        return await this.imageService.getImageWithoutArticle();
+    }
+
     @Put(':id')
-    @UsePipes(new ValidationPipe({whitelist:true}))
+    @UsePipes(new ValidationPipe({ whitelist: true }))
     async updateImage(@Param('id') id: string, @Body() req: UpdateImageDto): Promise<any> {
         return await this.imageService.updateImage(id, req);
     }
@@ -35,7 +40,7 @@ export class ImageController {
     }
 
     @Get('getByArticle/:id')
-    async getByArticle(@Param('id') id: string) :Promise<Image[]>{
+    async getByArticle(@Param('id') id: string): Promise<Image[]> {
         return await this.imageService.getByArticle(id);
     }
 }

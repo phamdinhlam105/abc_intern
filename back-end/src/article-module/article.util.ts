@@ -7,9 +7,11 @@ export default function convertEntityToArticle(entity: ArticleEntity): IArticle 
         return ({
             id: entity.id,
             title: entity.title,
+            author:entity.author,
             content: entity.content,
             thumbnail: entity.thumbnail,
             describe: entity.describe,
+            status: entity.status,
             createDate: entity.createDate.toLocaleDateString("en-GB"),
             category: convertEntityCategory(entity.category)
         });

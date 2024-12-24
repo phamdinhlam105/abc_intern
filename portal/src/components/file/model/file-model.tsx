@@ -1,5 +1,10 @@
+import { Article } from "@/components/article/model/article-model";
+
 export interface IFileProps {
-    fileName: string,
-    filePath: string,
-    size: number
+    id: string;
+    name: string;
+    article: Article | null;
+    describe: string;
+    url: string;
+    createDate:string;
 }

@@ -1,10 +1,15 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { IsEmpty, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CreateImageDto {
     @IsString()
     @IsUUID()
+    @IsOptional()
     idArticle: string;
+
+    @IsNotEmpty()
+    @IsString()
+    name: string;
 
     @IsNotEmpty()
     @IsString()
