@@ -42,11 +42,11 @@ export const getArticleColumns = ({ onDelete }: { onDelete: (idRow: string) => v
                 }`}>{row.getValue("status")}</p>
         </div>
     },
-    // {
-    //     accessorKey: "author",
-    //     header: ({ column }) => <ColumnHeader column={column} title="Tác giả" />,
-    //     cell: ({ row }) => <div className="w-28 font-medium">{row.getValue("author")}</div>
-    // },
+    {
+        accessorKey: "author",
+        header: ({ column }) => <ColumnHeader column={column} title="Tác giả" />,
+        cell: ({ row }) => <div className="w-28 font-medium">{row.getValue("author")}</div>
+    },
     {
         id: "actions",
         header: () => <div className="flex justify-center w-24 text-sm">Hành động</div>,

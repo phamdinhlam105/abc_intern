@@ -33,6 +33,13 @@ export class CategoryService {
     }
 
     async createCategory(createCategoryDto: CreateCategoryDto): Promise<ICategory> {
+        const { slug } = createCategoryDto;
+        const existingCategory = await this.categoryRepository.findOne({ where: { slug } });
+
+        if (existingCategory) {
+            throw new HttpException('Slug already exists', HttpStatus.CONFLICT);
+        }
+
         const newCategory = new CategoryEntity();
         if (createCategoryDto.parentId) {
             const parentCategory = await this.categoryRepository.findOneBy({ id: createCategoryDto.parentId, isActive: true });
@@ -63,6 +70,17 @@ export class CategoryService {
             throw new HttpException('id not found ', HttpStatus.NOT_FOUND);
         return convertEntityToCategory(category);
     }
+
+    async getCategoryBySlug(slug: string): Promise<ICategory | null> {
+        const category = await this.categoryRepository.findOne({
+            where: { slug: slug, isActive: true },
+            relations: { parentCategory: true }
+        });
+        if (!category)
+            throw new HttpException('slug not found ', HttpStatus.NOT_FOUND);
+        return convertEntityToCategory(category);
+    }
+
 
     async updateCategory(id: string, updatedCategoryDto: UpdateCategoryDto): Promise<ICategory> {
         this.checkIdIsValid(id);

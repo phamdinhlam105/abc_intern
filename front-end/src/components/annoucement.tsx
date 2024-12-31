@@ -1,22 +1,28 @@
+import { useEffect, useState } from "react";
 import DateWithCalendar from "./date-with-calendar";
+import { Article } from "./models/article-model";
 import MoreDetailButton from "./more-detail-button"
+import { getLinkByPostId } from "@/app/trang-chu/get-posts";
 
-interface IAnouncement {
-    title: string;
-    createDate: string;
-    img: string;
-    src: string;
-}
 
-export default function Announcement({ title, createDate, img, src }: IAnouncement) {
+export default function Announcement({ id, title, createDate, thumbnail }: Article) {
+    const [src, setSrc] = useState('');
 
+    useEffect(() => {
+        const fecthData = async () => {
+            const data = await getLinkByPostId(id);
+            if (data)
+                setSrc(data.link);
+        }
+        fecthData();
+    }, []);
 
     return (
         <div className="flex grid-col gap-4 my-5">
             <div className="w-1/3 ">
                 <img
                     className="object-fill"
-                    src={`${img}`}
+                    src={`${thumbnail}`}
                     alt={title}
                 />
             </div>
@@ -26,7 +32,7 @@ export default function Announcement({ title, createDate, img, src }: IAnounceme
                 </div>
                 <div className="flex justify-between">
                     <DateWithCalendar date={createDate} />
-                    <MoreDetailButton src={src} />
+                    <MoreDetailButton src={'post' + src} />
                 </div>
             </div>
         </div>

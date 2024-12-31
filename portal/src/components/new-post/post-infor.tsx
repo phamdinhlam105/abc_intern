@@ -40,6 +40,7 @@ export default function NewPostInformation({ setPost }: {
     const handleStatusChange = (value: "published" | "draft" | "deleted") => {
         setStatus(value)
     }
+    
 
     return <div className="border rounded-md shadow-sm w-1/3 p-4 bg-background">
         <h2 className="text-2xl font-bold my-2">Thông tin bài viết</h2>

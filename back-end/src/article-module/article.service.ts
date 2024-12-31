@@ -50,14 +50,14 @@ export class ArticleService {
         this.checkIdIsValid(id);
         const article = await this.articleRepository.findOne({
             where: { id: id, isActive: true },
-            relations: { category: true }
+            relations: { category: { parentCategory: true } }
         });
         if (article)
             return convertEntityToArticle(article);
         throw new HttpException('id not found ', HttpStatus.NOT_FOUND);
     }
 
-    async updateArticle(id: string, updatedArticleDto:UpdateArticlDto): Promise<IArticle> {
+    async updateArticle(id: string, updatedArticleDto: UpdateArticlDto): Promise<IArticle> {
         this.checkIdIsValid(id);
         const updatedArticleEntity = await this.articleRepository.findOne({
             where: { id: id, isActive: true },
@@ -109,5 +109,33 @@ export class ArticleService {
             category: { id: category.id }, isActive: true
         });
         return articleByCategory.map(convertEntityToArticle);
+    }
+
+    async getLinkById(id: string): Promise<any> {
+        this.checkIdIsValid(id);
+        const article = await this.articleRepository.findOne({
+            where: { id: id, isActive: true },
+            relations: {
+                category: {
+                    parentCategory: true
+                }
+            }
+        });
+        if (!article)
+            throw new HttpException('id post not found', HttpStatus.NOT_FOUND);
+        const link = (article.category.parentCategory ? article.category.parentCategory.slug : '') + '/' + article.category.slug + '/' + article.id;
+        return { link: link };
+    }
+
+    async AddImageToArticle(idArticle: string, listImage: string[]): Promise<any> {
+        this.checkIdIsValid(idArticle);
+        const article = await this.articleRepository.findOne({ where: { id: idArticle } })
+        listImage.forEach(async imageId => {
+            this.checkIdIsValid(imageId);
+            const image = await this.imageRepository.findOne({ where: { id: imageId } });
+            image.article = article;
+            this.imageRepository.save(image);
+        });
+        return { message: 'Image added to articl successfully' };
     }
 }

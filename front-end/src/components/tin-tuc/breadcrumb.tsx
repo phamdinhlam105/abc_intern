@@ -1,10 +1,10 @@
 
-export default function Breadcrumb({ category, title }: { category: any, title: string }) {
-    const path = (category: any): string => {
-        if (category.parent)
-            return path(category.parent) + " > " + category.name;
+export default function Breadcrumb({ category, title }: { category?: Category, title: string }) {
+    const path = (category?: Category): string => {
+        if (category?.parentCategory)
+            return path(category.parentCategory) + " > " + category.name;
         else
-            return "Trang chủ > " + category.name;
+            return "Trang chủ > " + category?.name;
     }
     return (
         <>

@@ -1,7 +1,8 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ArticleEntity } from "../article-module/article.entity";
 
 @Entity('category')
+@Index(['slug'], { unique: true })
 export class CategoryEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;

@@ -7,6 +7,8 @@ import { CategoryEntity } from './category-module/category.entity';
 import { CategoryModule } from './category-module/category.module';
 import { ArticleModule } from './article-module/article.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [ImageModule,CategoryModule,ArticleModule,
@@ -24,7 +26,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         synchronize: true,
       }),
       inject: [ConfigService],
-    })],
+    }),
+    AuthModule,
+    UsersModule],
   controllers: [],
   providers: [],
 })

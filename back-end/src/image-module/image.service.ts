@@ -79,10 +79,11 @@ export class ImageService {
 
     async getImageWithoutArticle() {
         const images = await this.imageRepository.find({
-            where: { isActive: true, article: null },
+            where: { isActive: true },
             relations: { article: true }
         });
-        return images.map(convertEntityToImage);
+        const filteredImages = images.filter(image => image.article === null);
+        return filteredImages.map(convertEntityToImage);
     }
 
     async deleteImage(id: string) {
@@ -108,4 +109,6 @@ export class ImageService {
         });
         return imagesByArticle.map(convertEntityToImage);
     }
+
+
 }

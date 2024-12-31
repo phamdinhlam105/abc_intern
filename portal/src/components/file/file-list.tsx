@@ -15,7 +15,7 @@ export default function FileList({ files, selectedFiles, setSelectedFiles }: {
     }
 
     return (
-        <ul className="list grid grid-cols-8 p-4 gap-4">
+        <ul className="list grid md:grid-cols-8 sm:grid-cols-4 p-4 gap-4">
             {files.map(file => <li key={file.id} >
                 <ImageFile file={file} handleCheckChange={handleCheckChange} />
             </li>

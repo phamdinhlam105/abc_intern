@@ -22,13 +22,19 @@ export class CategoryController {
     async getCategoryById(@Param('id') id: string): Promise<ICategory> {
         return await this.categoryService.getCategoryById(id);
     }
-    @Put('/:id')
+
+    @Get('/:slug')
+    async getCategoryBySlug(@Param('slug') slug: string): Promise<ICategory> {
+        return await this.categoryService.getCategoryById(slug);
+    }
+
+    @Put('/slug/:id')
     @UsePipes(new ValidationPipe({ whitelist: true }))
-    async updateImage(@Param('id') id: string, @Body() req: UpdateCategoryDto): Promise<any> {
+    async updateCategory(@Param('id') id: string, @Body() req: UpdateCategoryDto): Promise<any> {
         return await this.categoryService.updateCategory(id, req);
     }
     @Delete('/:id')
-    async deleteImage(@Param('id') id: string): Promise<any> {
+    async deleteCategory(@Param('id') id: string): Promise<any> {
         return await this.categoryService.deleteCategory(id);
     }
 }

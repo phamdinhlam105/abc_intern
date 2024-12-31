@@ -18,14 +18,14 @@ export class ImageController {
         return await this.imageService.getAllImages();
     }
 
-    @Get(':id')
-    async getImageById(@Param('id') id: string): Promise<Image> {
-        return await this.imageService.getImageById(id);
-    }
-
     @Get('non-article')
     async getImageWithoutArticle(): Promise<Image[]> {
         return await this.imageService.getImageWithoutArticle();
+    }
+    
+    @Get(':id')
+    async getImageById(@Param('id') id: string): Promise<Image> {
+        return await this.imageService.getImageById(id);
     }
 
     @Put(':id')
@@ -43,4 +43,5 @@ export class ImageController {
     async getByArticle(@Param('id') id: string): Promise<Image[]> {
         return await this.imageService.getByArticle(id);
     }
+
 }

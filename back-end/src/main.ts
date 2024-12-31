@@ -8,7 +8,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   const corsOptions: CorsOptions = {
-    origin: 'http://localhost:3001',
+    origin: ['http://localhost:3001','http://localhost:3005'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     preflightContinue: false,
     optionsSuccessStatus: 204,
